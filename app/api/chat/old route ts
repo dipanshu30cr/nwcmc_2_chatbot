@@ -1,0 +1,577 @@
+import { type NextRequest, NextResponse } from "next/server"
+import { createClient } from "@supabase/supabase-js"
+
+// Initialize Supabase client
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+
+// Using Groq for free AI responses
+const GROQ_API_KEY = process.env.GROQ_API_KEY
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+
+export const maxDuration = 30
+
+// Cache for synonyms to avoid repeated API calls
+const synonymCache = new Map<string, string[]>()
+
+// Define the menu structure for the chatbot
+const MENU_STRUCTURE = {
+  english: {
+    welcome: "Hi, Welcome to Nanded Municipal Corporation, How can I help you?",
+    other_option: "Other (Ask a question)",
+    menus: [
+      {
+        label: "Applied List",
+        query: "Applied List",
+        submenus: [{ label: "All Application List", query: "All Application List" }],
+      },
+      {
+        label: "Property",
+        query: "Property",
+        submenus: [
+          { label: "New Assessment of Property tax", query: "New Assessment of Property tax" },
+          { label: "Re-Assessment of Property tax", query: "Re-Assessment of Property tax" },
+          { label: "Tax Assessment - Demolition & Reconstruct", query: "Tax Assessment - Demolition & Reconstruct" },
+          { label: "Name Transfer - By Valid Documents", query: "Name Transfer - By Valid Documents" },
+          { label: "Name Transfer - By Heirship", query: "Name Transfer - By Heirship" },
+          { label: "Name Transfer - By Other Way", query: "Name Transfer - By Other Way" },
+          { label: "Name Transfer - By Property Division", query: "Name Transfer - By Property Division" },
+          { label: "Tax Exemption for Property tax", query: "Tax Exemption for Property tax" },
+          { label: "Tax Exemption - Unoccupied", query: "Tax Exemption - Unoccupied" },
+          { label: "Raising Tax Objection", query: "Raising Tax Objection" },
+          { label: "Self Assessment of Property tax", query: "Self Assessment of Property tax" },
+          { label: "Demand Bill of Property tax", query: "Demand Bill of Property tax" },
+          { label: "No Dues Certificate - Property Tax", query: "No Dues Certificate - Property Tax" },
+          { label: "Pay Your Property Tax", query: "Pay Your Property Tax" },
+          { label: "Extract of Property Tax Ledger", query: "Extract of Property Tax Ledger" },
+
+        ],
+      },
+      {
+        label: "Water",
+        query: "Water",
+        submenus: [
+          { label: "New Water Connection", query: "New Water Connection" },
+          { label: "No Dues Certificate - Water Charges", query: "No Dues Certificate - Water Charges" },
+          { label: "Demand Bill for Water Usage", query: "Demand Bill for Water Usage" },
+          { label: "Water Connection Certificate", query: "Water Connection Certificate" },
+          { label: "Complaint for Faulty Meter", query: "Complaint for Faulty Meter" },
+          { label: "Complaint for Water Pressure", query: "Complaint for Water Pressure" },
+          { label: "Complaint for Water Quality", query: "Complaint for Water Quality" },
+          { label: "Complaint for Illegal Connection", query: "Complaint for Illegal Connection" },
+          { label: "Ownership Change of Water Connection", query: "Ownership Change of Water Connection" },
+          { label: "Change in Tap Size", query: "Change in Tap Size" },
+          { label: "Disconnection of Water Connection", query: "Disconnection of Water Connection" },
+          { label: "Change in Water Usage Category", query: "Change in Water Usage Category" },
+          { label: "Re-Connection of Water Connection", query: "Re-Connection of Water Connection" },
+          { label: "Plumber License - New", query: "Plumber License - New" },
+          { label: "Renewal of Plumber License", query: "Renewal of Plumber License" },
+
+        ],
+      },
+      {
+        label: "No Objection Certificate",
+        query: "No Objection Certificate",
+        submenus: [
+          { label: "NOC for Fire (Provisional)", query: "NOC for Fire (Provisional)" },
+          { label: "NOC for Fire - Final", query: "NOC for Fire - Final" },
+          { label: "NOC for Fire - Final New", query: "NOC for Fire - Final New" },
+          { label: "NOC for Fire - Renewal", query: "NOC for Fire - Renewal" },
+          { label: "NOC for Godown/Store/Trade", query: "NOC for Godown/Store/Trade" },
+          { label: "NOC for Pendol", query: "NOC for Pendol" },
+
+        ],
+      },
+      {
+        label: "Health",
+        query: "Health",
+        submenus: [
+          { label: "Nursing Home Registration - New", query: "Nursing Home Registration - New" },
+          { label: "Nursing Home Registration - Renewal", query: "Nursing Home Registration - Renewal" },
+          { label: "Nursing Home Regi. - Ownership Change", query: "Nursing Home Regi. - Ownership Change" },
+          { label: "Maintenance of Cleanliness in City", query: "Maintenance of Cleanliness in City" },
+
+        ],
+      },
+      {
+        label: "Birth, Death & Marriage",
+        query: "Birth, Death & Marriage",
+        submenus: [
+          { label: "Birth Certificate", query: "Birth Certificate" },
+          { label: "Death Certificate", query: "Death Certificate" },
+          { label: "Marriage Certificate", query: "Marriage Certificate" },
+        ],
+      },
+      {
+        label: "Advertisement & Movie Shooting",
+        query: "Advertisement & Movie Shooting",
+        submenus: [
+          { label: "Hoarding & Sinage License", query: "Hoarding & Sinage License" },
+          { label: "Movies Shooting License", query: "Movies Shooting License" },
+        ],
+      },
+      {
+        label: "Garden",
+        query: "Garden",
+        submenus: [
+          { label: "Permission for Tree Cutting", query: "Permission for Tree Cutting" },
+        ],
+      },
+      {
+        label: "Town Planning",
+        query: "Town Planning",
+        submenus: [
+          { label: "Area Map", query: "Area Map" },
+          { label: "Zone Certificate", query: "Zone Certificate" },
+          { label: "Building Permission", query: "Building Permission" },
+          { label: "Plinth Certificate", query: "Plinth Certificate" },
+          { label: "Occupancy Certificate", query: "Occupancy Certificate" },
+        ],
+      },
+      {
+        label: "Trade License",
+        query: "Trade License",
+        submenus: [
+          { label: "New Trade License", query: "New Trade License" },
+          { label: "Renewal of Trade Licence", query: "Renewal of Trade Licence" },
+          { label: "Transfer of Trade Licence Ownership", query: "Transfer of Trade Licence Ownership" },
+          { label: "Change in the Firm Name", query: "Change in the Firm Name" },
+          { label: "Change in the Trade Category", query: "Change in the Trade Category" },
+          { label: "Change in the Partner's Name", query: "Change in the Partner's Name" },
+          { label: "Addition/Removal of Partner", query: "Addition/Removal of Partner" },
+          { label: "Cancellation of Trade License", query: "Cancellation of Trade License" },
+          { label: "Duplicate copy of Trade Licence", query: "Duplicate copy of Trade Licence" },
+          { label: "Auto Renewal of Trade Licence", query: "Auto Renewal of Trade Licence" },
+          { label: "Notice For Expired Trade Licence", query: "Notice For Expired Trade Licence" },
+          { label: "Hawker Registration", query: "Hawker Registration" },
+          { label: "Lodging House - New Licence", query: "Lodging House - New Licence" },
+          { label: "Lodging House - Renewal of Licence", query: "Lodging House - Renewal of Licence" },
+          { label: "Function Hall - New Licence", query: "Function Hall - New Licence" },
+          { label: "Function Hall - Renewal of Licence", query: "Function Hall - Renewal of Licence" },
+        ],
+      },
+      {
+        label: "PWD",
+        query: "PWD",
+        submenus: [
+          { label: "To Fill Pot Holes in Road", query: "To Fill Pot Holes in Road" },
+        ],
+      },
+      {
+        label: "Sewer",
+        query: "Sewer",
+        submenus: [
+          { label: "New Drainage Connection", query: "New Drainage Connection" },
+          { label: "Maintenance of Gutter /Manhole Cover", query: "Maintenance of Gutter /Manhole Cover" },
+        ],
+      },
+    ],
+  },
+
+
+
+  marathi: {
+    welcome: "नमस्कार, नांदेड महानगरपालिकेत आपले स्वागत आहे, आपण मला कसे सहाय्य करू शकतो?",
+    other_option: "इतर (प्रश्न विचारा)",
+    menus: [
+      {
+        label: "अर्ज केलेली यादी", // Applied List
+        query: "Applied List",
+        submenus: [
+          { label: "अर्ज यादी", query: "All Application List" }, // Application List
+        ],
+      },
+      {
+        label: "मालमत्ता", // Property
+        query: "Property",
+        submenus: [
+          { label: "नवीन मालमत्ता कर मूल्यांकन", query: "New Assessment of Property tax" },
+          { label: "मालमत्ता कर पुनर्मूल्यांकन", query: "Re-Assessment of Property tax" },
+          { label: "कर मूल्यांकन - पाडणे आणि पुनर्रचना", query: "Tax Assessment - Demolition & Reconstruct" },
+          { label: "दस्तऐवजांवर आधारित नाव बदला", query: "Name Transfer - By Valid Documents" },
+          { label: "वारसाहक्कावर आधारित नाव बदला", query: "Name Transfer - By Heirship" },
+          { label: "इतर मार्गाने नाव बदला", query: "Name Transfer - By Other Way" },
+          { label: "मालमत्ता विभागणीने नाव बदला", query: "Name Transfer - By Property Division" },
+          { label: "मालमत्ता करासाठी कर सवलत", query: "Tax Exemption for Property tax" },
+          { label: "अवास्तव मालमत्तेसाठी कर सवलत", query: "Tax Exemption - Unoccupied" },
+          { label: "कर आक्षेप नोंदवा", query: "Raising Tax Objection" },
+          { label: "स्वयं मूल्यांकन मालमत्ता कर", query: "Self Assessment of Property tax" },
+          { label: "मालमत्ता कर मागणी बिल", query: "Demand Bill of Property tax" },
+          { label: "नो ड्यूस प्रमाणपत्र - मालमत्ता कर", query: "No Dues Certificate - Property Tax" },
+          { label: "आपला मालमत्ता कर भरा", query: "Pay Your Property Tax" },
+          { label: "मालमत्ता कर लेजर उतारा", query: "Extract of Property Tax Ledger" }
+        ]
+      },
+      {
+        label: "पाणी", // Water
+        query: "Water",
+        submenus: [
+          { label: "नवीन पाणी कनेक्शन", query: "New Water Connection" },
+          { label: "पाणी शुल्क थकबाकी प्रमाणपत्र", query: "No Dues Certificate - Water Charges" },
+          { label: "पाणी वापरासाठी मागणी बिल", query: "Demand Bill for Water Usage" },
+          { label: "पाणी कनेक्शन प्रमाणपत्र", query: "Water Connection Certificate" },
+          { label: "दोषी मीटरसाठी तक्रार", query: "Complaint for Faulty Meter" },
+          { label: "पाणी दाबाबद्दल तक्रार", query: "Complaint for Water Pressure" },
+          { label: "पाण्याच्या गुणवत्तेबद्दल तक्रार", query: "Complaint for Water Quality" },
+          { label: "बेकायदेशीर कनेक्शनसाठी तक्रार", query: "Complaint for Illegal Connection" },
+          { label: "पाणी कनेक्शनचा मालकी हक्क बदला", query: "Ownership Change of Water Connection" },
+          { label: "टॅप आकारात बदल", query: "Change in Tap Size" },
+          { label: "पाणी कनेक्शनचे डिसकनेक्शन", query: "Disconnection of Water Connection" },
+          { label: "पाणी वापर श्रेणीत बदल", query: "Change in Water Usage Category" },
+          { label: "पाणी कनेक्शन पुन्हा जोडा", query: "Re-Connection of Water Connection" },
+          { label: "प्लंबर लायसन्स - नवीन", query: "Plumber License - New" },
+          { label: "प्लंबर लायसन्स - नूतनीकरण", query: "Renewal of Plumber License" }
+        ]
+      },
+      {
+        label: "फायर एनओसी", // Fire NOC
+        query: "Fire NOC",
+        submenus: [
+          { label: "फायर एनओसी (तात्पुरती)", query: "NOC for Fire (Provisional)" },
+          { label: "फायर एनओसी - अंतिम", query: "NOC for Fire - Final" },
+          { label: "फायर एनओसी - अंतिम नवीन", query: "NOC for Fire - Final New" },
+          { label: "फायर एनओसी - नूतनीकरण", query: "NOC for Fire - Renewal" },
+          { label: "गोडाऊन/स्टोअर/व्यापारासाठी NOC", query: "NOC for Godown/Store/Trade" },
+          { label: "पंडालसाठी एनओसी", query: "NOC for Pendol" }
+        ]
+      },
+      {
+        label: "आरोग्य", // Health
+        query: "Health",
+        submenus: [
+          { label: "नर्सिंग होम नोंदणी - नवीन", query: "Nursing Home Registration - New" },
+          { label: "नर्सिंग होम नोंदणी - नूतनीकरण", query: "Nursing Home Registration - Renewal" },
+          { label: "नर्सिंग होम नोंदणी - मालकी बदल", query: "Nursing Home Regi. - Ownership Change" },
+          { label: "शहरात स्वच्छतेचे देखभाल", query: "Maintenance of Cleanliness in City" }
+        ]
+      },
+      {
+        label: "जन्म, मृत्यू व विवाह", // Birth, Death & Marriage
+        query: "Birth, Death & Marriage",
+        submenus: [
+          { label: "जन्म प्रमाणपत्र", query: "Birth Certificate" },
+          { label: "मृत्यू प्रमाणपत्र", query: "Death Certificate" },
+          { label: "विवाह प्रमाणपत्र", query: "Marriage Certificate" }
+        ]
+      },
+      {
+        label: "जाहिरात व चित्रपट चित्रीकरण", // Advertisement & Movie Shooting
+        query: "Advertisement & Movie Shooting",
+        submenus: [
+          { label: "फलक व साइनज परवाना", query: "Hoarding & Sinage License" },
+          { label: "चित्रपट चित्रीकरण परवाना", query: "Movies Shooting License" }
+        ]
+      },
+      {
+        label: "उद्यान", // Garden
+        query: "Garden",
+        submenus: [
+          { label: "झाड तोडण्याची परवानगी", query: "Permission for Tree Cutting" }
+        ]
+      },
+      {
+        label: "नगर रचना", // Town Planning
+        query: "Town Planning",
+        submenus: [
+          { label: "क्षेत्र नकाशा", query: "Area Map" },
+          { label: "झोन प्रमाणपत्र", query: "Zone Certificate" },
+          { label: "बांधकाम परवानगी", query: "Building Permission" },
+          { label: "प्लिंथ प्रमाणपत्र", query: "Plinth Certificate" },
+          { label: "ऑक्युपंसी प्रमाणपत्र", query: "Occupancy Certificate" }
+        ]
+      },
+      {
+        label: "व्यवसाय परवाना", // Trade License
+        query: "Trade License",
+        submenus: [
+          { label: "नवीन व्यवसाय परवाना", query: "New Trade License" },
+          { label: "व्यवसाय परवाना नूतनीकरण", query: "Renewal of Trade Licence" },
+          { label: "व्यवसाय परवाना मालकी हक्क बदल", query: "Transfer of Trade Licence Ownership" },
+          { label: "फर्म नावात बदल", query: "Change in the Firm Name" },
+          { label: "व्यवसाय श्रेणीत बदल", query: "Change in the Trade Category" },
+          { label: "भागीदाराच्या नावात बदल", query: "Change in the Partner's Name" },
+          { label: "भागीदार समावेश/वगळा", query: "Addition/Removal of Partner" },
+          { label: "व्यवसाय परवाना रद्द", query: "Cancellation of Trade License" },
+          { label: "परवान्याची डुप्लिकेट प्रत", query: "Duplicate copy of Trade Licence" },
+          { label: "परवाना आपोआप नूतनीकरण", query: "Auto Renewal of Trade Licence" },
+          { label: "कालबाह्य परवान्यासाठी सूचना", query: "Notice For Expired Trade Licence" },
+          { label: "हॉकर्स नोंदणी", query: "Hawker Registration" },
+          { label: "लॉजिंग हाऊस - नवीन परवाना", query: "Lodging House - New Licence" },
+          { label: "लॉजिंग हाऊस - परवाना नूतनीकरण", query: "Lodging House - Renewal of Licence" },
+          { label: "फंक्शन हॉल - नवीन परवाना", query: "Function Hall - New Licence" },
+          { label: "फंक्शन हॉल - परवाना नूतनीकरण", query: "Function Hall - Renewal of Licence" }
+        ]
+      },
+      {
+        label: "सार्वजनिक बांधकाम विभाग", // PWD
+        query: "PWD",
+        submenus: [
+          { label: "रस्त्यातील खड्डे भरणे", query: "To Fill Pot Holes in Road" }
+        ]
+      },
+      {
+        label: "मलनिस्सारण", // Sewer
+        query: "Sewer",
+        submenus: [
+          { label: "नवीन ड्रेनेज कनेक्शन", query: "New Drainage Connection" },
+          { label: "गटर / मॅनहोल कव्हरची देखभाल", query: "Maintenance of Gutter /Manhole Cover" }
+        ]
+      },
+    ],
+  },
+}
+
+// Generate synonyms using Groq AI (supports multiple languages)
+async function generateSynonyms(query: string): Promise<string[]> {
+  const cacheKey = query.toLowerCase()
+  if (synonymCache.has(cacheKey)) {
+    return synonymCache.get(cacheKey)!
+  }
+
+  try {
+    const response = await fetch(GROQ_API_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${GROQ_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "llama3-8b-8192",
+        messages: [
+          {
+            role: "system",
+            content: `You are a synonym generator. Given a word or phrase, provide related words, synonyms, and alternative phrasings that mean the same thing. 
+
+IMPORTANT: Always include BOTH English and Marathi terms, regardless of input language.
+
+Rules:
+1. Return only the synonyms/related terms, separated by commas
+2. Include both English and Marathi variations
+3. Maximum 12 terms total
+4. Don't include explanations, just the terms
+
+Example:
+Input: "business hours" 
+Output: working hours, office hours, operating hours, timing, schedule, व्यवसाय तास, कार्य तास, ऑफिस तास
+
+Input: "माझ्या पाण्याचा कर भरण्याची इच्छा आहे"
+Output: pay water tax, water bill, water charges, water payment, पाणी कर, पाणी बिल, जल कर, water tax payment`,
+          },
+          {
+            role: "user",
+            content: `Generate synonyms and related terms for: "${query}"`,
+          },
+        ],
+        temperature: 0.3,
+        max_tokens: 200,
+        stream: false,
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error("Failed to generate synonyms")
+    }
+
+    const data = await response.json()
+    const synonymsText = data.choices[0]?.message?.content || ""
+
+    const synonyms = synonymsText
+      .split(",")
+      .map((term: string) => term.trim().toLowerCase())
+      .filter((term: string) => term.length > 0 && term !== query.toLowerCase())
+      .slice(0, 12)
+
+    const allTerms = [query.toLowerCase(), ...synonyms]
+
+    synonymCache.set(cacheKey, allTerms)
+
+    return allTerms
+  } catch (error) {
+    console.error("Error generating synonyms:", error)
+    return [query.toLowerCase()]
+  }
+}
+
+// Enhanced content matching with better cross-language support
+async function findRelevantContent(query: string) {
+  try {
+    const { data: faqs } = await supabase.from("faqs").select("*").order("created_at", { ascending: false })
+    const { data: knowledge } = await supabase
+      .from("knowledge_base")
+      .select("*")
+      .order("created_at", { ascending: false })
+
+    if (!faqs && !knowledge) {
+      return { faqs: [], knowledge: [] }
+    }
+
+    const expandedTerms = await generateSynonyms(query)
+
+    console.log(`Query: "${query}" expanded to:`, expandedTerms)
+
+    const relevantFaqs =
+      faqs?.filter((faq) => {
+        const questionLower = faq.question.toLowerCase()
+        const answerLower = faq.answer.toLowerCase()
+
+        const hasMatch = expandedTerms.some(
+          (term) =>
+            questionLower.includes(term) ||
+            answerLower.includes(term) ||
+            calculateSimilarity(query.toLowerCase(), questionLower) > 0.2,
+        )
+        return hasMatch
+      }) || []
+
+    const relevantKnowledge =
+      knowledge?.filter((kb) => {
+        const titleLower = kb.title.toLowerCase()
+        const contentLower = kb.content.toLowerCase()
+
+        const hasMatch = expandedTerms.some(
+          (term) =>
+            titleLower.includes(term) ||
+            contentLower.includes(term) ||
+            calculateSimilarity(query.toLowerCase(), titleLower) > 0.2,
+        )
+        return hasMatch
+      }) || []
+
+    return { faqs: relevantFaqs, knowledge: relevantKnowledge }
+  } catch (error) {
+    console.error("Error finding relevant content:", error)
+    return { faqs: [], knowledge: [] }
+  }
+}
+
+// Simple similarity calculation (Jaccard similarity)
+function calculateSimilarity(str1: string, str2: string): number {
+  const words1 = new Set(str1.split(" "))
+  const words2 = new Set(str2.split(" "))
+
+  const intersection = new Set([...words1].filter((x) => words2.has(x)))
+  const union = new Set([...words1, ...words2])
+
+  return intersection.size / union.size
+}
+
+async function generateResponse(query: string, context: any, language: string) {
+  const contextText = [
+    ...context.faqs.map((faq: any) => `Q: ${faq.question}\nA: ${faq.answer}`),
+    ...context.knowledge.map((kb: any) => `${kb.title}: ${kb.content}`),
+  ].join("\n\n")
+
+  // Check if the query is a specific menu/submenu item
+  let isMenuItemQuery = false
+  let menuItemInfo = ""
+
+  for (const langKey of Object.keys(MENU_STRUCTURE)) {
+    const langConfig = (MENU_STRUCTURE as any)[langKey]
+    for (const menu of langConfig.menus) {
+      if (query === menu.query) {
+        isMenuItemQuery = true
+        menuItemInfo = `The user selected the main menu item: "${menu.label}". Provide a general overview of "${menu.label}" services offered by Nanded Municipal Corporation.`
+        break
+      }
+      for (const submenu of menu.submenus) {
+        if (query === submenu.query) {
+          isMenuItemQuery = true
+          menuItemInfo = `The user selected the submenu item: "${submenu.label}". Provide detailed information about "${submenu.label}" service offered by Nanded Municipal Corporation. Include steps, requirements, or relevant links if available in the context.`
+          break
+        }
+      }
+      if (isMenuItemQuery) break
+    }
+    if (isMenuItemQuery) break
+  }
+
+  const systemPrompt = `You are a helpful AI assistant for Nanded Municipal Corporation. Your primary goal is to assist users with information about municipal services.
+
+STRICT RULES:
+1. ONLY use information from the provided context below.
+2. If the context contains relevant information, answer naturally and comprehensively, even if the question is phrased differently.
+3. If the context does NOT contain ANY relevant information for the query, respond with: "${language === "marathi" ? "माझ्या ज्ञान आधारात याबद्दल माहिती नाही. कृपया आमच्या सपोर्ट टीमशी संपर्क साधा." : "I don't have information about that in my knowledge base. Please contact our support team for more details."}"
+4. Respond in the language specified by the user's chosen language (${language}).
+5. Be conversational and helpful.
+
+${isMenuItemQuery ? menuItemInfo : ""}
+
+Context (this is ALL the information you can use):
+${contextText}
+
+Remember: If you find relevant information in the context above, answer the question naturally even if it's phrased differently than the original FAQ.`
+
+  try {
+    const response = await fetch(GROQ_API_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${GROQ_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "llama3-8b-8192",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: query },
+        ],
+        temperature: 0.4,
+        max_tokens: 500,
+        stream: false,
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error("Failed to get AI response")
+    }
+
+    const data = await response.json()
+    return data.choices[0]?.message?.content || "I'm sorry, I couldn't generate a response."
+  } catch (error) {
+    console.error("Error generating AI response:", error)
+    return "I'm sorry, I'm having trouble processing your request right now."
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const { message, language } = await req.json() // Now receiving language from widget
+
+    if (!message) {
+      const response = NextResponse.json({ error: "Message is required" }, { status: 400 })
+      response.headers.set("Access-Control-Allow-Origin", "*")
+      response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS")
+      response.headers.set("Access-Control-Allow-Headers", "Content-Type")
+      return response
+    }
+
+    // Find relevant content from database
+    const context = await findRelevantContent(message)
+
+    // Generate AI response
+    const response = await generateResponse(message, context, language || "english") // Pass language to generateResponse
+
+    const jsonResponse = NextResponse.json({ response })
+    jsonResponse.headers.set("Access-Control-Allow-Origin", "*")
+    jsonResponse.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS")
+    jsonResponse.headers.set("Access-Control-Allow-Headers", "Content-Type")
+
+    return jsonResponse
+  } catch (error) {
+    console.error("Chat API error:", error)
+    const errorResponse = NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    errorResponse.headers.set("Access-Control-Allow-Origin", "*")
+    errorResponse.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS")
+    errorResponse.headers.set("Access-Control-Allow-Headers", "Content-Type")
+    return errorResponse
+  }
+}
+
+export async function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  })
+}
