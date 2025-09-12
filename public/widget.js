@@ -636,7 +636,7 @@
         <style>
           #ai-chatbot-widget {
             position: fixed;
-            bottom: 20px;
+            bottom: 100px;
             right: 20px;
             z-index: 10000;
             font-family: ${this.config.theme.fontFamily};
