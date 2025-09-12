@@ -139,7 +139,7 @@
     <script>
       (function() {
         var chatbotConfig = {
-          apiUrl: 'http://localhost:3000/api/chat',
+          apiUrl: 'https://nwcmc-2-chatbot.vercel.app/api/chat',
           theme: {
             primaryColor: '#3b82f6',
             fontFamily: 'system-ui, sans-serif'
@@ -147,7 +147,7 @@
         };
         
         var script = document.createElement('script');
-        script.src = 'http://localhost:3000/widget.js';
+        script.src = 'https://nwcmc-2-chatbot.vercel.app/widget.js';
         script.async = true;
         script.onload = function() {
           if (window.AIChatbot) {
