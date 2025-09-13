@@ -720,13 +720,13 @@
             overflow: hidden;
           }
           #ai-chatbot-header {
-            background: #11184;
+            background: #111844;
             color: white;
             padding: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height:18px;
+            height:20px;
           }
           #ai-chatbot-header h3 {
             margin: 0;
