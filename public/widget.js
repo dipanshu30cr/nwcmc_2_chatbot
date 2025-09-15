@@ -8,7 +8,7 @@
   }
 
   const LOGO_URL =
-    "http://nwcmc.sparrowsoftech.in/web/upload_files/website/img/logo/weblogo6364d3f0f495b6ab9dcf8d3b5c6e0b01.png"
+    "https://nwcmc.gov.in/web/upload_files/website/img/logo/weblogo6364d3f0f495b6ab9dcf8d3b5c6e0b01.png"
 
   const AIChatbot = {
     initialized: false,
