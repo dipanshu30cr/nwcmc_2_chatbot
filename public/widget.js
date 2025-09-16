@@ -785,11 +785,11 @@
           .ai-chatbot-typing-logo { height: 20px; width: auto; }
           .ai-chatbot-welcome-logo-container {
             display: block;
-            min-height: 130px;
+            min-height: 110px;
             margin: auto;
           }
           .ai-chatbot-welcome-logo {
-            max-height: 130px; 
+            max-height: 90px; 
             object-fit: contain;
           }
           #ai-chatbot-input-container {
