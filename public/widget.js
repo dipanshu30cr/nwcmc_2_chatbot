@@ -1005,7 +1005,7 @@
       this.addMessageToHistory(null, false, "welcome_logo")
       // Welcome + language buttons
       this.addMessageToHistory(
-        "Hi, Welcome to NWCMC Assistant.\nनमस्कार! NWCMC सहाय्यक मध्ये आपले स्वागत आहे.\n\nPlease select a language./कृपया भाषा निवडा.",
+        "Welcome to NWCMC Assistant / NWCMC सहाय्यकात स्वागत — Choose Language / भाषा निवडा",
       )
       this.addButtonsToHistory([
         { label: "English", action: "language", value: "english" },
