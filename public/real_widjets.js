@@ -1,3 +1,5 @@
+
+
 /* global window, document, fetch */
 ;(() => {
   // Prevent multiple initializations
@@ -6,7 +8,7 @@
   }
 
   const LOGO_URL =
-    "http://nwcmc.sparrowsoftech.in/web/upload_files/website/img/logo/weblogo6364d3f0f495b6ab9dcf8d3b5c6e0b01.png"
+    "https://nwcmc.gov.in/web/upload_files/website/img/logo/weblogo6364d3f0f495b6ab9dcf8d3b5c6e0b01.png"
 
   const AIChatbot = {
     initialized: false,
@@ -255,7 +257,7 @@
         },
         // Grievance & Suggestion sample data (for now)
         grievance: {
-          title: "Grievance",
+          title: "Suggestion",
           menus: [
             {
               label: "Submit Grievance",
@@ -303,7 +305,7 @@
         topCategories: [
           { label: "RTS (हक्क सेवा)", key: "rts" },
           { label: "RTI (माहितीचा अधिकार)", key: "rti" },
-
+          
           { label: "महत्वाची देय सेवा", key: "payments" },
           { label: "तक्रार", key: "grievance" },
           { label: "सूचना", key: "suggestion" },
@@ -553,6 +555,71 @@
       },
     },
 
+    // Sample replies for RTI & Grievance (and can be reused as placeholders)
+    SAMPLE_RESPONSES: {
+      "RTI Apply Online": `RTI Online:
+- Visit the RTI portal (sample).
+- Fill applicant details and subject matter.
+- Upload supporting documents (if any).
+- Pay the prescribed fee online.
+- Submit and note the acknowledgment number.`,
+      "RTI Apply Offline": `RTI Offline:
+- Write an RTI application addressed to the PIO.
+- Include your contact details and specific information sought.
+- Attach fee via DD/IPO as applicable.
+- Submit at the designated office and collect acknowledgment.`,
+      "RTI Application Fee": `RTI Fee (Sample):
+- Application Fee: Rs. 10
+- Inspection Fee: Rs. 5 per page (sample)
+- Additional charges may apply as per rules.`,
+      "RTI Inspection Fee": `RTI Inspection (Sample):
+- Inspection charges per page: Rs. 5 (sample)
+- Payable at the time of document collection.`,
+      "RTI First Appeal": `RTI First Appeal (Sample):
+- File within 30 days of PIO's response/non-response.
+- Address to the First Appellate Authority.
+- Attach original RTI copy and acknowledgment.`,
+      "RTI Second Appeal": `RTI Second Appeal (Sample):
+- File to the State Information Commission.
+- Include copies of RTI application and first appeal decision.`,
+      "Submit Grievance Online": `Submit Grievance (Sample - Online):
+
+      
+- Go to Grievance portal (sample).
+- Enter details, attach photos (optional).
+- Submit and note the grievance ID.`,
+      "Submit Grievance Offline": `Submit Grievance (Sample - Offline):
+- Visit the ward office.
+- Fill grievance form with contact details.
+- Submit and collect receipt/ID.`,
+      "Track Grievance By ID": `Track Grievance (Sample):
+- Enter your grievance ID on the portal to view status.`,
+      "Track Grievance By Mobile": `Track Grievance (Sample):
+- Use your registered mobile number to fetch the grievance status.`,
+      "Suggestion Online Form": `Suggestion (Sample):
+- Use the online suggestion form to submit your inputs.`,
+      // Payment generic sample hints (you can replace with AI by calling API)
+
+//       "Online Payment for Water": `Water - Online Payment (Sample):
+// - Use the official payment portal to pay online.`,
+      "Offline Payment for Water": `Water - Offline Payment (Sample):
+- Pay at the designated office counters.`,
+//       "Online Payment for Property": `Property - Online Payment (Sample):
+// - Use the official property tax portal for online payment.`,
+      "Offline Payment for Property": `Property - Offline Payment (Sample):
+- Pay at authorized collection centers.`,
+//       "Online Payment for Trade": `Trade - Online Payment (Sample):
+// - Use the trade license portal for online payment.`,
+      "Offline Payment for Trade": `Trade - Offline Payment (Sample):
+- Pay at the trade licensing office.`,
+
+"Offline Payment for Nursing Home": `Nursing Home - Offline Payment (Sample):
+- Pay at the Nursing Home licensing office.`,
+
+"Offline Payment for Fire Noc": `Fire Noc - Offline Payment (Sample):
+- Pay at the Fire Noc licensing office.`,
+    },
+
     init: function (config) {
       if (this.initialized) return
       this.config = config
@@ -642,8 +709,9 @@
             position: absolute;
             bottom: 80px;
             right: 0;
-            width: 360px;
-            height: 520px;
+            width: 300px;
+            height: 412px;
+            bottom: 55px;
             background: white;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.12);
@@ -652,15 +720,17 @@
             overflow: hidden;
           }
           #ai-chatbot-header {
-            background: #2a3864;
+            background: #111844;
             color: white;
             padding: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height:20px;
           }
           #ai-chatbot-header h3 {
             margin: 0;
+            color:white;
             font-size: 16px;
             font-weight: 600;
             display: flex;
@@ -679,15 +749,16 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 1px;
             background: #fff;
           }
           .ai-chatbot-message {
             max-width: 80%;
             padding: 8px 12px;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 1.4;
+            font-weight:600;
           }
           .ai-chatbot-message.user {
             background: #2a3864;
@@ -700,6 +771,7 @@
             color: #334155;
             align-self: flex-start;
             border-bottom-left-radius: 4px;
+            font-size: 11px;
           }
           .ai-chatbot-message.typing {
             background: #f1f5f9;
@@ -713,11 +785,11 @@
           .ai-chatbot-typing-logo { height: 20px; width: auto; }
           .ai-chatbot-welcome-logo-container {
             display: block;
-            min-height: 130px;
+            min-height: 110px;
             margin: auto;
           }
           .ai-chatbot-welcome-logo {
-            max-height: 100%; 
+            max-height: 90px; 
             object-fit: contain;
           }
           #ai-chatbot-input-container {
@@ -727,8 +799,15 @@
             gap: 8px;
           }
           #ai-chatbot-input {
-            flex: 1; border: 1px solid #e2e8f0; border-radius: 20px; padding: 8px 16px;
-            font-size: 14px; outline: none; resize: none; font-family: inherit; height: 20px; scrollbar-width: none;
+            flex: 1; border: 1px solid #e2e8f0; 
+            border-radius: 20px; 
+            padding: 8px 16px;
+            font-size: 14px; 
+            outline: none; 
+            resize: none; font-family: 
+            inherit; height: 20px; 
+            scrollbar-width: none;
+            height: 40px;
           }
           #ai-chatbot-input:focus { border-color: ${this.config.theme.primaryColor}; }
           #ai-chatbot-send {
@@ -745,6 +824,7 @@
             background: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 15px;
             font-size: 14px; cursor: pointer; text-align: left; width: 100%;
             transition: background 0.2s, border-color 0.2s;
+            font-weight: 606;
           }
           .ai-chatbot-button-option:hover { background: #d1d5db; border-color: #94a3b8; }
           @media (max-width: 480px) {
@@ -925,7 +1005,7 @@
       this.addMessageToHistory(null, false, "welcome_logo")
       // Welcome + language buttons
       this.addMessageToHistory(
-        "Hi, Welcome to NWCMC Assistant.\nनमस्कार! NWCMC सहाय्यक मध्ये आपले स्वागत आहे.\n\nPlease select a language./कृपया भाषा निवडा.",
+        "Welcome to NWCMC Assistant / NWCMC सहाय्यकात स्वागत — Choose Language / भाषा निवडा",
       )
       this.addButtonsToHistory([
         { label: "English", action: "language", value: "english" },
@@ -1037,7 +1117,23 @@
         const langKey = this.currentLanguage
         const fullQuery = `${topKey.toUpperCase()} - ${menuQuery} - ${subQuery}`
 
-        // ========== CHANGED: Now ALL categories use AI API (fetch from FAQs/Knowledge) ==========
+        // For RTI and Grievance we return sample data (no AI)
+        if (topKey === "rti" || topKey === "grievance") {
+          const sample = this.SAMPLE_RESPONSES[subQuery] || "Sample information will appear here."
+          this.addMessageToHistory(sample)
+          this.offerNav()
+          return
+        }
+
+        // For Key Payment Serving we can return sample payments info (as requested)
+        if (topKey === "payments") {
+          const sample = this.SAMPLE_RESPONSES[subQuery] || "Payment information (sample) will appear here."
+          this.addMessageToHistory(sample)
+          this.offerNav()
+          return
+        }
+
+        // For RTS (and others not sample-only), ask AI with a concise instruction
         this.currentLevel = "free_text"
         this.updateInputState()
 
@@ -1184,6 +1280,3 @@
   // Expose globally
   window.AIChatbot = AIChatbot
 })()
-
-
-

@@ -1,5 +1,3 @@
-
-
 /* global window, document, fetch */
 ;(() => {
   // Prevent multiple initializations
@@ -7,8 +5,99 @@
     return
   }
 
-  const LOGO_URL =
-    "https://nwcmc.gov.in/web/upload_files/website/img/logo/weblogo6364d3f0f495b6ab9dcf8d3b5c6e0b01.png"
+  const LOGO_URL = "https://nwcmc.gov.in/web/upload_files/website/img/logo/weblogo6364d3f0f495b6ab9dcf8d3b5c6e0b01.png"
+
+  const DIRECT_RTI_REPLY = `Go to this link - https://nwcmc.gov.in/web/others.php?uid=NDM1&id=ENG#gsc.tab=0
+
+Various RTS Information available:
+- Right to Information Act, 2005
+- Right to Information Order
+- Right to Information Order – 17/12/2015
+- Right to Information Order – 07/07/2017
+- Right to Information Order – 14/12/2017
+- Right to Information Order – 23/08/2018
+- Right to Information Order – 17/07/2019
+- Right to Information Order – 13/10/2020
+- Right to Information Order – 15/12/2020
+- Right to Information Order – 16/09/2021
+- Right to Information Order – 09/03/2023
+- Information to be Proactively Disclosed under Section 4(1)(b) of the Right to Information Act, 2005 (Computer Department)
+- Information to be Proactively Disclosed under Section 4(1)(b) of the Right to Information Act, 2005 (Stores Department)
+- Information to be Proactively Disclosed under Section 4(1)(b) of the Right to Information Act, 2005 (Computer Department 2024–25)`
+
+
+
+const DIRECT_GRIEVANCE_REPLY = `Steps to Submit a Grievance or Complaint
+Step 1: Log in at: https://nwcmc.gov.in/web/citizen/grievance/login.php?uid=NzI4&id=ENG&cmd=clear#gsc.tab=0 
+Use your Registered Mobile Number to log in.
+If logging in for the first time, select New Registration.
+
+Step 2: After logging in, open the sidebar menu and select New Complaint.
+
+Step 3: Fill in the required details:
+Zone (झोन)*
+Department (विभाग)*
+Category (श्रेणी)*
+Priority (प्राधान्य)*
+Address (पत्ता)*
+Description (वर्णन)*
+Optional details:
+Ward (प्रभाग)
+File (फाइल) – if any document needs to be uploaded
+
+Step 4: Click Submit.
+Note: To check the status of your grievance/complaint, go to the sidebar menu and select Complaint List. The current status of your application will be displayed there.`
+
+
+
+const CONTACT_ENGLISH = `📞 Contact:
++912462234710, +912462234577`
+
+const CONTACT_MARATHI = `📞 संपर्क: +91 2462 234710, +91 2462 234577`
+
+
+const DIRECT_GRIEVANCE_REPLY_MARATHI = `📝 तक्रार/अर्ज सादर करण्याच्या पायऱ्या
+पायरी 1: या लिंकवर लॉगिन करा – https://nwcmc.gov.in/web/citizen/grievance/login.php?uid=NzI4&id=ENG&cmd=clear#gsc.tab=0
+लॉगिन करण्यासाठी तुमचा नोंदणीकृत मोबाईल नंबर वापरा.
+प्रथम लॉगिन करत असल्यास New Registration निवडा.
+
+पायरी 2: लॉगिन केल्यानंतर, साइडबार मेनूमधून New Complaint निवडा.
+
+पायरी 3: आवश्यक माहिती भरा:
+Zone (झोन)*
+Department (विभाग)*
+Category (श्रेणी)*
+Priority (प्राधान्य)*
+Address (पत्ता)*
+Description (वर्णन)*
+पर्यायी माहिती:
+Ward (प्रभाग)
+File (फाइल) – आवश्यक असल्यास दस्तऐवज अपलोड करा
+
+पायरी 4: Submit वर क्लिक करा.
+टीप: तुमच्या तक्रारी/अर्जाची स्थिती तपासण्यासाठी, साइडबार मेनूमधून Complaint List निवडा. तुमच्या अर्जाची सद्यस्थिती तिथे दिसेल.`
+
+
+
+const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://nwcmc.gov.in/web/others.php?uid=NDM1&id=ENG&#gsc.tab=0
+विविध माहितीचा अधिकार (RTS) संदर्भातील माहिती:
+माहितीचा अधिकार अधिनियम, 2005
+माहितीचा अधिकार आदेश
+माहितीचा अधिकार आदेश – 17/12/2015
+माहितीचा अधिकार आदेश – 07/07/2017
+माहितीचा अधिकार आदेश – 14/12/2017
+माहितीचा अधिकार आदेश – 23/08/2018
+माहितीचा अधिकार आदेश – 17/07/2019
+माहितीचा अधिकार आदेश – 13/10/2020
+माहितीचा अधिकार आदेश – 15/12/2020
+माहितीचा अधिकार आदेश – 16/09/2021
+माहितीचा अधिकार आदेश – 09/03/2023
+माहितीचा अधिकार अधिनियम, 2005 कलम 4(1)(ख) नुसार स्वयंप्रेरणेने जाहीर करावयाची माहिती (संगणक विभाग)
+माहितीचा अधिकार अधिनियम, 2005 कलम 4(1)(ख) नुसार स्वयंप्रेरणेने जाहीर करावयाची माहिती (भांडार विभाग)
+माहितीचा अधिकार अधिनियम, 2005 कलम 4(1)(ख) नुसार स्वयंप्रेरणेने जाहीर करावयाची माहिती (संगणक विभाग 2024–25)`
+
+
+
 
   const AIChatbot = {
     initialized: false,
@@ -22,6 +111,14 @@
     currentTopCategory: null, // 'rts' | 'rti' | 'payments' | 'grievance'
     currentMenuContext: null, // selected menu object (within a top category)
 
+    // Voice features state (NEW)
+    sttSupported: false,
+    ttsSupported: false,
+    recognition: null,
+    isListening: false,
+    speaking: false,
+    selectedVoice: null,
+
     // Menu structures
     MENU_STRUCTURE: {
       english: {
@@ -31,7 +128,8 @@
           { label: "RTI", key: "rti" },
           { label: "Key Payment Serving", key: "payments" },
           { label: "Grievance", key: "grievance" },
-          { label: "Suggestion", key: "suggestion" },
+          { label: "Emergency Contact", key: "contact" },
+          // { label: "Emergency Contact", key: "suggestion" },
         ],
         // RTS full menus with submenus
         rts: {
@@ -46,24 +144,24 @@
               label: "Property",
               query: "Property",
               submenus: [
-                { label: "New Assessment of Property tax", query: "New Assessment of Property tax" },
-                { label: "Re-Assessment of Property tax", query: "Re-Assessment of Property tax" },
+                { label: "New tax Assessment", query: "New Assessment of Property tax" },
+                { label: "Re-Assessment of tax", query: "Re-Assessment of Property tax" },
                 {
-                  label: "Tax Assessment - Demolition & Reconstruct",
-                  query: "Tax Assessment - Demolition & Reconstruct",
+                  label: "Demo/Rebuild Assessment",
+                  query: "Demo/Rebuild Assessment",
                 },
-                { label: "Name Transfer - By Valid Documents", query: "Name Transfer - By Valid Documents" },
-                { label: "Name Transfer - By Heirship", query: "Name Transfer - By Heirship" },
-                { label: "Name Transfer - By Other Way", query: "Name Transfer - By Other Way" },
-                { label: "Name Transfer - By Property Division", query: "Name Transfer - By Property Division" },
-                { label: "Tax Exemption for Property tax", query: "Tax Exemption for Property tax" },
-                { label: "Tax Exemption - Unoccupied", query: "Tax Exemption - Unoccupied" },
+                { label: "Name Transfer–Documents", query: "Name Transfer - By Valid Documents" },
+                { label: "Name Transfer - Heirship", query: "Name Transfer - By Heirship" },
+                { label: "Name Transfer - Other Way", query: "Name Transfer - By Other Way" },
+                { label: "Name Transfer - Division", query: "Name Transfer - By Property Division" },
+                { label: "Tax Exemption-Property tax", query: "Tax Exemption for Property tax" },
+                { label: "Tax Exemption -Unoccupied", query: "Tax Exemption - Unoccupied" },
                 { label: "Raising Tax Objection", query: "Raising Tax Objection" },
-                { label: "Self Assessment of Property tax", query: "Self Assessment of Property tax" },
+                { label: "Self Assessment of tax", query: "Self Assessment of Property tax" },
                 { label: "Demand Bill of Property tax", query: "Demand Bill of Property tax" },
-                { label: "No Dues Certificate - Property Tax", query: "No Dues Certificate - Property Tax" },
+                { label: "NOC- Property Tax", query: "No Dues Certificate - Property Tax" },
                 { label: "Pay Your Property Tax", query: "Pay Your Property Tax" },
-                { label: "Extract of Property Tax Ledger", query: "Extract of Property Tax Ledger" },
+                { label: "Property Tax Ledger", query: "Extract of Property Tax Ledger" },
               ],
             },
             {
@@ -71,20 +169,20 @@
               query: "Water",
               submenus: [
                 { label: "New Water Connection", query: "New Water Connection" },
-                { label: "No Dues Certificate - Water Charges", query: "No Dues Certificate - Water Charges" },
-                { label: "Demand Bill for Water Usage", query: "Demand Bill for Water Usage" },
+                { label: "NOC - Water Charges", query: "No Dues Certificate - Water Charges" },
+                { label: "Demand Bill for Usage", query: "Demand Bill for Water Usage" },
                 { label: "Water Connection Certificate", query: "Water Connection Certificate" },
-                { label: "Complaint for Faulty Meter", query: "Complaint for Faulty Meter" },
-                { label: "Complaint for Water Pressure", query: "Complaint for Water Pressure" },
-                { label: "Complaint for Water Quality", query: "Complaint for Water Quality" },
-                { label: "Complaint for Illegal Connection", query: "Complaint for Illegal Connection" },
-                { label: "Ownership Change of Water Connection", query: "Ownership Change of Water Connection" },
+                { label: "Complaint- Faulty Meter", query: "Complaint for Faulty Meter" },
+                { label: "Complaint- Water Pressure", query: "Complaint for Water Pressure" },
+                { label: "Complaint- Water Quality", query: "Complaint for Water Quality" },
+                { label: "Complaint- Illegal Connection", query: "Complaint for Illegal Connection" },
+                { label: "OwneR Change- Connection", query: "Ownership Change of Water Connection" },
                 { label: "Change in Tap Size", query: "Change in Tap Size" },
-                { label: "Disconnection of Water Connection", query: "Disconnection of Water Connection" },
-                { label: "Change in Water Usage Category", query: "Change in Water Usage Category" },
-                { label: "Re-Connection of Water Connection", query: "Re-Connection of Water Connection" },
+                { label: "Disconnection", query: "Disconnection of Water Connection" },
+                { label: "Change in Usage Category", query: "Change in Water Usage Category" },
+                { label: "Re-Connection", query: "Re-Connection of Water Connection" },
                 { label: "Plumber License - New", query: "Plumber License - New" },
-                { label: "Renewal of Plumber License", query: "Renewal of Plumber License" },
+                { label: "Plumber License Renewal", query: "Renewal of Plumber License" },
               ],
             },
             {
@@ -103,10 +201,10 @@
               label: "Health",
               query: "Health",
               submenus: [
-                { label: "Nursing Home Registration - New", query: "Nursing Home Registration - New" },
-                { label: "Nursing Home Registration - Renewal", query: "Nursing Home Registration - Renewal" },
-                { label: "Nursing Home Regi. - Ownership Change", query: "Nursing Home Regi. - Ownership Change" },
-                { label: "Maintenance of Cleanliness in City", query: "Maintenance of Cleanliness in City" },
+                { label: "Nursing Home Regi. -New", query: "Nursing Home Registration - New" },
+                { label: "Nursing Home Regi. -Renewal", query: "Nursing Home Registration - Renewal" },
+                { label: "Nursing Home -Owner Change", query: "Nursing Home Regi. - Ownership Change" },
+                { label: "Cleanliness in City", query: "Maintenance of Cleanliness in City" },
               ],
             },
             {
@@ -122,14 +220,14 @@
               label: "Advertisement & Movie Shooting",
               query: "Advertisement & Movie Shooting",
               submenus: [
-                { label: "Hoarding & Sinage License", query: "Hoarding & Sinage License" },
+                { label: "Hoarding/Sinage License", query: "Hoarding & Sinage License" },
                 { label: "Movies Shooting License", query: "Movies Shooting License" },
               ],
             },
             {
               label: "Garden",
               query: "Garden",
-              submenus: [{ label: "Permission for Tree Cutting", query: "Permission for Tree Cutting" }],
+              submenus: [{ label: "Tree Cutting Permission", query: "Permission for Tree Cutting" }],
             },
             {
               label: "Town Planning",
@@ -148,33 +246,33 @@
               submenus: [
                 { label: "New Trade License", query: "New Trade License" },
                 { label: "Renewal of Trade Licence", query: "Renewal of Trade Licence" },
-                { label: "Transfer of Trade Licence Ownership", query: "Transfer of Trade Licence Ownership" },
+                { label: "Transfer of Ownership", query: "Transfer of Trade Licence Ownership" },
                 { label: "Change in the Firm Name", query: "Change in the Firm Name" },
                 { label: "Change in the Trade Category", query: "Change in the Trade Category" },
                 { label: "Change in the Partner's Name", query: "Change in the Partner's Name" },
                 { label: "Addition/Removal of Partner", query: "Addition/Removal of Partner" },
-                { label: "Cancellation of Trade License", query: "Cancellation of Trade License" },
-                { label: "Duplicate copy of Trade Licence", query: "Duplicate copy of Trade Licence" },
-                { label: "Auto Renewal of Trade Licence", query: "Auto Renewal of Trade Licence" },
-                { label: "Notice For Expired Trade Licence", query: "Notice For Expired Trade Licence" },
+                { label: "Cancellation of License", query: "Cancellation of Trade License" },
+                { label: "Duplicate copy of Licence", query: "Duplicate copy of Trade Licence" },
+                { label: "Auto Renewal of Licence", query: "Auto Renewal of Trade Licence" },
+                { label: "Notice For Expired Licence", query: "Notice For Expired Trade Licence" },
                 { label: "Hawker Registration", query: "Hawker Registration" },
-                { label: "Lodging House - New Licence", query: "Lodging House - New Licence" },
-                { label: "Lodging House - Renewal of Licence", query: "Lodging House - Renewal of Licence" },
-                { label: "Function Hall - New Licence", query: "Function Hall - New Licence" },
-                { label: "Function Hall - Renewal of Licence", query: "Function Hall - Renewal of Licence" },
+                { label: "Lodging House-New Licence", query: "Lodging House - New Licence" },
+                { label: "Lodging House-Renewal Licence", query: "Lodging House - Renewal of Licence" },
+                { label: "Function Hall-New Licence", query: "Function Hall - New Licence" },
+                { label: "Function Hall-Renewal Licence", query: "Function Hall - Renewal of Licence" },
               ],
             },
             {
               label: "PWD",
               query: "PWD",
-              submenus: [{ label: "To Fill Pot Holes in Road", query: "To Fill Pot Holes in Road" }],
+              submenus: [{ label: "Fill Pot Holes", query: "To Fill Pot Holes in Road" }],
             },
             {
               label: "Sewer",
               query: "Sewer",
               submenus: [
                 { label: "New Drainage Connection", query: "New Drainage Connection" },
-                { label: "Maintenance of Gutter /Manhole Cover", query: "Maintenance of Gutter /Manhole Cover" },
+                { label: "Maintenance of Gutter", query: "Maintenance of Gutter /Manhole Cover" },
               ],
             },
           ],
@@ -187,7 +285,7 @@
               label: "Water",
               query: "Payment - Water",
               submenus: [
-                { label: "Online Payment", query: "Online Payment for Water" },
+                { label: "Payment Steps", query: "Payment Steps for Water" },
                 { label: "Offline Payment", query: "Offline Payment for Water" },
               ],
             },
@@ -195,104 +293,54 @@
               label: "Property",
               query: "Payment - Property",
               submenus: [
-                { label: "Online Payment", query: "Online Payment for Property" },
+                { label: "Payment Steps", query: "Payment Steps for Property" },
                 { label: "Offline Payment", query: "Offline Payment for Property" },
               ],
             },
-            {
-              label: "Trade",
-              query: "Payment - Trade",
-              submenus: [
-                { label: "Online Payment", query: "Online Payment for Trade" },
-                { label: "Offline Payment", query: "Offline Payment for Trade" },
-              ],
-            },
-            {
-              label: "Fire Noc",
-              query: "Payment - Fire Noc",
-              submenus: [
-                { label: "Online Payment", query: "Online Payment for Fire Noc" },
-                { label: "Offline Payment", query: "Offline Payment for Fire Noc" },
-              ],
-            },
-            {
-              label: "Nursing Home",
-              query: "Payment - Nursing Home",
-              submenus: [
-                { label: "Online Payment", query: "Online Payment for Nursing Home" },
-                { label: "Offline Payment", query: "Offline Payment for Nursing Home" },
-              ],
-            },
           ],
         },
-        // RTI sample data (for now)
+        // RTI, Grievance, Suggestion updated sections below
         rti: {
           title: "Right to Information (RTI)",
-          menus: [
-            {
-              label: "How to Apply",
-              query: "RTI How to Apply",
-              submenus: [
-                { label: "Online", query: "RTI Apply Online" },
-                { label: "Offline", query: "RTI Apply Offline" },
-              ],
-            },
-            {
-              label: "Fee Structure",
-              query: "RTI Fee Structure",
-              submenus: [
-                { label: "Application Fee", query: "RTI Application Fee" },
-                { label: "Inspection Fee", query: "RTI Inspection Fee" },
-              ],
-            },
-            {
-              label: "Status / Appeal",
-              query: "RTI Status Appeal",
-              submenus: [
-                { label: "First Appeal", query: "RTI First Appeal" },
-                { label: "Second Appeal", query: "RTI Second Appeal" },
-              ],
-            },
-          ],
+          // No menus/submenus; show a direct reply
+          directReply: DIRECT_RTI_REPLY,
+          menus: [],
         },
-        // Grievance & Suggestion sample data (for now)
         grievance: {
-          title: "Suggestion",
-          menus: [
-            {
-              label: "Submit Grievance",
-              query: "Submit Grievance",
-              submenus: [
-                { label: "Online", query: "Submit Grievance Online" },
-                { label: "Offline", query: "Submit Grievance Offline" },
-              ],
-            },
-            {
-              label: "Track Grievance",
-              query: "Track Grievance",
-              submenus: [
-                { label: "By ID", query: "Track Grievance By ID" },
-                { label: "By Mobile", query: "Track Grievance By Mobile" },
-              ],
-            },
-            {
-              label: "Give Suggestion",
-              query: "Give Suggestion",
-              submenus: [{ label: "Online Form", query: "Suggestion Online Form" }],
-            },
-          ],
+          title: "Grievance",
+          // No menus/submenus; show a direct reply
+          directReply: DIRECT_GRIEVANCE_REPLY,
+          menus: [],
         },
 
-        suggestion: {
-          title: "Suggestion",
-          menus: [
-            {
-              label: "Give Suggestion",
-              query: "Give Suggestion",
-              submenus: [{ label: "Online Form", query: "Suggestion Online Form" }],
-            },
-          ],
+        // suggestion: {
+        //   title: "Suggestion",
+        //   // Exactly 2 menus, no submenus; each menu directly replies
+        //   menus: [
+        //     {
+        //       label: "Online Form",
+        //       query: "suggestion_online",
+        //       submenus: [],
+        //       replyKey: "Suggestion Online Form", // uses SAMPLE_RESPONSES
+        //     },
+        //     {
+        //       label: "Offline",
+        //       query: "suggestion_offline",
+        //       submenus: [],
+        //       reply:
+        //         "Submit your suggestion offline at the ward office counter and collect an acknowledgement (sample).",
+        //     },
+        //   ],
+        // },
+
+        contact: {
+          title: "Emergency Contact",
+          // Exactly 2 menus, no submenus; each menu directly replies
+          directReply: CONTACT_ENGLISH,
+          menus: [],
         },
+
+
         other_option: "Other (Ask a question)",
         back_main: "Main Categories",
         back_prev: "Back",
@@ -305,10 +353,11 @@
         topCategories: [
           { label: "RTS (हक्क सेवा)", key: "rts" },
           { label: "RTI (माहितीचा अधिकार)", key: "rti" },
-          
+
           { label: "महत्वाची देय सेवा", key: "payments" },
           { label: "तक्रार", key: "grievance" },
-          { label: "सूचना", key: "suggestion" },
+          { label: "📞 आपत्कालीन कॉल क्रमांक", key: "contact" },
+          // { label: "सूचना", key: "suggestion" },
         ],
         rts: {
           title: "RTS (हक्क सेवा)",
@@ -326,7 +375,7 @@
               submenus: [
                 { label: "नवीन मालमत्ता कर मूल्यांकन", query: "New Assessment of Property tax" },
                 { label: "मालमत्ता कर पुनर्मूल्यांकन", query: "Re-Assessment of Property tax" },
-                { label: "कर मूल्यांकन - पाडणे आणि पुनर्रचना", query: "Tax Assessment - Demolition & Reconstruct" },
+                { label: "कर मूल्यांकन-पाडणे/पुनर्रचना", query: "Tax Assessment - Demolition & Reconstruct" },
                 { label: "दस्तऐवजांवर आधारित नाव बदला", query: "Name Transfer - By Valid Documents" },
                 { label: "वारसाहक्कावर आधारित नाव बदला", query: "Name Transfer - By Heirship" },
                 { label: "इतर मार्गाने नाव बदला", query: "Name Transfer - By Other Way" },
@@ -336,7 +385,7 @@
                 { label: "कर आक्षेप नोंदवा", query: "Raising Tax Objection" },
                 { label: "स्वयं मूल्यांकन मालमत्ता कर", query: "Self Assessment of Property tax" },
                 { label: "मालमत्ता कर मागणी बिल", query: "Demand Bill of Property tax" },
-                { label: "नो ड्यूस प्रमाणपत्र - मालमत्ता कर", query: "No Dues Certificate - Property Tax" },
+                { label: "नो ड्यूस प्रमाणपत्र - कर", query: "No Dues Certificate - Property Tax" },
                 { label: "आपला मालमत्ता कर भरा", query: "Pay Your Property Tax" },
                 { label: "मालमत्ता कर लेजर उतारा", query: "Extract of Property Tax Ledger" },
               ],
@@ -353,7 +402,7 @@
                 { label: "पाणी दाबाबद्दल तक्रार", query: "Complaint for Water Pressure" },
                 { label: "पाण्याच्या गुणवत्तेबद्दल तक्रार", query: "Complaint for Water Quality" },
                 { label: "बेकायदेशीर कनेक्शनसाठी तक्रार", query: "Complaint for Illegal Connection" },
-                { label: "पाणी कनेक्शनचा मालकी हक्क बदला", query: "Ownership Change of Water Connection" },
+                { label: "कनेक्शनचा मालकी हक्क बदला", query: "Ownership Change of Water Connection" },
                 { label: "टॅप आकारात बदल", query: "Change in Tap Size" },
                 { label: "पाणी कनेक्शनचे डिसकनेक्शन", query: "Disconnection of Water Connection" },
                 { label: "पाणी वापर श्रेणीत बदल", query: "Change in Water Usage Category" },
@@ -378,9 +427,9 @@
               label: "आरोग्य", // Health
               query: "Health",
               submenus: [
-                { label: "नर्सिंग होम नोंदणी - नवीन", query: "Nursing Home Registration - New" },
-                { label: "नर्सिंग होम नोंदणी - नूतनीकरण", query: "Nursing Home Registration - Renewal" },
-                { label: "नर्सिंग होम नोंदणी - मालकी बदल", query: "Nursing Home Regi. - Ownership Change" },
+                { label: "नर्सिंग होम नोंदणी -नवीन", query: "Nursing Home Registration - New" },
+                { label: "नर्सिंग होम नोंदणी -नूतनीकरण", query: "Nursing Home Registration - Renewal" },
+                { label: "नर्सिंग होम नोंदणी -मालकी बदल", query: "Nursing Home Regi. - Ownership Change" },
                 { label: "शहरात स्वच्छतेचे देखभाल", query: "Maintenance of Cleanliness in City" },
               ],
             },
@@ -430,7 +479,7 @@
                 { label: "भागीदार समावेश/वगळा", query: "Addition/Removal of Partner" },
                 { label: "व्यवसाय परवाना रद्द", query: "Cancellation of Trade License" },
                 { label: "परवान्याची डुप्लिकेट प्रत", query: "Duplicate copy of Trade Licence" },
-                { label: "परवाना आपोआप नूतनीकरण", query: "Auto Renewal of Trade Licence" },
+                { label: "परवा आपोआप नूतनीकरण", query: "Auto Renewal of Trade Licence" },
                 { label: "कालबाह्य परवान्यासाठी सूचना", query: "Notice For Expired Trade Licence" },
                 { label: "हॉकर्स नोंदणी", query: "Hawker Registration" },
                 { label: "लॉजिंग हाऊस - नवीन परवाना", query: "Lodging House - New Licence" },
@@ -449,7 +498,7 @@
               query: "Sewer",
               submenus: [
                 { label: "नवीन ड्रेनेज कनेक्शन", query: "New Drainage Connection" },
-                { label: "गटर / मॅनहोल कव्हरची देखभाल", query: "Maintenance of Gutter /Manhole Cover" },
+                { label: "गटर/मॅनहोल कव्हरची देखभाल", query: "Maintenance of Gutter /Manhole Cover" },
               ],
             },
           ],
@@ -461,7 +510,7 @@
               label: "पाणी",
               query: "Payment - Water",
               submenus: [
-                { label: "ऑनलाइन पेमेंट", query: "Online Payment for Water" },
+                { label: "पेमेंट टप्पे पाणी", query: "Payment Steps for Water" },
                 { label: "ऑफलाइन पेमेंट", query: "Offline Payment for Water" },
               ],
             },
@@ -469,85 +518,49 @@
               label: "मालमत्ता",
               query: "Payment - Property",
               submenus: [
-                { label: "ऑनलाइन पेमेंट", query: "Online Payment for Property" },
+                { label: "पेमेंट टप्पे मालमत्ता", query: "Payment Steps for Property" },
                 { label: "ऑफलाइन पेमेंट", query: "Offline Payment for Property" },
               ],
             },
-            {
-              label: "व्यवसाय", // Trade
-              query: "Payment - Trade",
-              submenus: [
-                { label: "ऑनलाइन पेमेंट", query: "Online Payment for Trade" },
-                { label: "ऑफलाइन पेमेंट", query: "Offline Payment for Trade" },
-              ],
-            },
           ],
         },
+        // RTI, Grievance, Suggestion updated sections below
         rti: {
           title: "RTI (माहितीचा अधिकार)",
-          menus: [
-            {
-              label: "अर्ज कसा करावा",
-              query: "RTI How to Apply",
-              submenus: [
-                { label: "ऑनलाइन", query: "RTI Apply Online" },
-                { label: "ऑफलाइन", query: "RTI Apply Offline" },
-              ],
-            },
-            {
-              label: "शुल्क संरचना",
-              query: "RTI Fee Structure",
-              submenus: [
-                { label: "अर्ज शुल्क", query: "RTI Application Fee" },
-                { label: "निरीक्षण शुल्क", query: "RTI Inspection Fee" },
-              ],
-            },
-            {
-              label: "स्थिती / अपील",
-              query: "RTI Status Appeal",
-              submenus: [
-                { label: "प्रथम अपील", query: "RTI First Appeal" },
-                { label: "द्वितीय अपील", query: "RTI Second Appeal" },
-              ],
-            },
-          ],
+          directReply: DIRECT_RTI_REPLY_MARATHI,
+          menus: [],
         },
         grievance: {
           title: "तक्रार",
-          menus: [
-            {
-              label: "तक्रार नोंदवा",
-              query: "Submit Grievance",
-              submenus: [
-                { label: "ऑनलाइन", query: "Submit Grievance Online" },
-                { label: "ऑफलाइन", query: "Submit Grievance Offline" },
-              ],
-            },
-            {
-              label: "तक्रार ट्रॅक करा",
-              query: "Track Grievance",
-              submenus: [
-                { label: "ID द्वारे", query: "Track Grievance By ID" },
-                { label: "मोबाईल द्वारे", query: "Track Grievance By Mobile" },
-              ],
-            },
-            {
-              label: "सूचना द्या",
-              query: "Give Suggestion",
-              submenus: [{ label: "ऑनलाइन फॉर्म", query: "Suggestion Online Form" }],
-            },
-          ],
+          directReply: DIRECT_GRIEVANCE_REPLY_MARATHI,
+          menus: [],
         },
-        suggestion: {
-          title: "सूचना",
-          menus: [
-            {
-              label: "सूचना द्या",
-              query: "Give Suggestion",
-              submenus: [{ label: "ऑनलाइन फॉर्म", query: "Suggestion Online Form" }],
-            },
-          ],
+
+        contact: {
+          title: "📞 आपत्कालीन कॉल क्रमांक",
+          // Exactly 2 menus, no submenus; each menu directly replies
+          directReply: CONTACT_MARATHI,
+          menus: [],
         },
+
+
+        // suggestion: {
+        //   title: "सूचना",
+        //   menus: [
+        //     {
+        //       label: "ऑनलाइन फॉर्म",
+        //       query: "suggestion_online",
+        //       submenus: [],
+        //       replyKey: "Suggestion Online Form",
+        //     },
+        //     {
+        //       label: "ऑफलाइन",
+        //       query: "suggestion_offline",
+        //       submenus: [],
+        //       reply: "तुमची सूचना कार्यालयात ऑफलाइन जमा करा आणि पावती घ्या (नमुना).",
+        //     },
+        //   ],
+        // },
         other_option: "इतर (प्रश्न विचारा)",
         back_main: "मुख्य श्रेणी",
         back_prev: "मागे",
@@ -556,7 +569,7 @@
     },
 
     // Sample replies for RTI & Grievance (and can be reused as placeholders)
-    SAMPLE_RESPONSES: {
+SAMPLE_RESPONSES  : {
       "RTI Apply Online": `RTI Online:
 - Visit the RTI portal (sample).
 - Fill applicant details and subject matter.
@@ -598,25 +611,15 @@
 - Use your registered mobile number to fetch the grievance status.`,
       "Suggestion Online Form": `Suggestion (Sample):
 - Use the online suggestion form to submit your inputs.`,
-      // Payment generic sample hints (you can replace with AI by calling API)
-
-//       "Online Payment for Water": `Water - Online Payment (Sample):
-// - Use the official payment portal to pay online.`,
       "Offline Payment for Water": `Water - Offline Payment (Sample):
 - Pay at the designated office counters.`,
-//       "Online Payment for Property": `Property - Online Payment (Sample):
-// - Use the official property tax portal for online payment.`,
       "Offline Payment for Property": `Property - Offline Payment (Sample):
 - Pay at authorized collection centers.`,
-//       "Online Payment for Trade": `Trade - Online Payment (Sample):
-// - Use the trade license portal for online payment.`,
       "Offline Payment for Trade": `Trade - Offline Payment (Sample):
 - Pay at the trade licensing office.`,
-
-"Offline Payment for Nursing Home": `Nursing Home - Offline Payment (Sample):
+      "Offline Payment for Nursing Home": `Nursing Home - Offline Payment (Sample):
 - Pay at the Nursing Home licensing office.`,
-
-"Offline Payment for Fire Noc": `Fire Noc - Offline Payment (Sample):
+      "Offline Payment for Fire Noc": `Fire Noc - Offline Payment (Sample):
 - Pay at the Fire Noc licensing office.`,
     },
 
@@ -627,6 +630,8 @@
       this.createWidget()
       this.attachEventListeners()
       this.resetChat()
+      // Initialize voice features (NEW)
+      this.initVoice()
     },
 
     createWidget: function () {
@@ -737,7 +742,29 @@
             align-items: center;
             gap: 8px;
           }
+          /* NEW: header actions container for mic and close buttons */
+          #ai-chatbot-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+          }
           .ai-chatbot-header-logo { height: 24px; width: auto; }
+
+          /* NEW: Header microphone button styles */
+          #ai-chatbot-mic {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            border-radius: 50%;
+            width: 28px; height: 28px;
+            cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+          }
+          #ai-chatbot-mic:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+          #ai-chatbot-mic svg { width: 14px; height: 14px; fill: #fff; }
+          #ai-chatbot-mic.listening { background: #ef4444; }
+          #ai-chatbot-mic:disabled { opacity: 0.5; cursor: not-allowed; }
+
           #ai-chatbot-close {
             background: none; border: none; color: white; cursor: pointer;
             font-size: 20px; padding: 0; width: 24px; height: 24px;
@@ -772,6 +799,19 @@
             align-self: flex-start;
             border-bottom-left-radius: 4px;
             font-size: 11px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+            max-width: 90%;
+          }
+          .ai-chatbot-message.bot a {
+            color: #007bff; /* Bright blue color */
+            text-decoration: underline; /* Optional: adds underline */
+            word-break: break-all; /* Ensures long URLs wrap properly */
+          }
+
+          .ai-chatbot-message.bot a:hover {
+            color: #rgb(15, 0, 83)/* Darker blue on hover */
           }
           .ai-chatbot-message.typing {
             background: #f1f5f9;
@@ -820,18 +860,25 @@
           .ai-chatbot-buttons-container {
             display: flex; flex-direction: column; gap: 8px; margin-top: 12px; width: 100%; align-items: flex-start;
           }
-          .ai-chatbot-button-option {
-            background: #e2e8f0; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 15px;
-            font-size: 14px; cursor: pointer; text-align: left; width: 100%;
+          .ai-chatbot-button-option {            
+            background: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 5px 15px;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: left;
+            width: 90%;
             transition: background 0.2s, border-color 0.2s;
             font-weight: 606;
+            height: 30px;
           }
           .ai-chatbot-button-option:hover { background: #d1d5db; border-color: #94a3b8; }
           @media (max-width: 480px) {
             #ai-chatbot-window { width: calc(100vw - 40px); height: calc(100vh - 100px); bottom: 80px; right: 20px; }
           }
         </style>
-        <!-- Curved Text and Emoji Bubble -->
+         
         <div id="ai-chatbot-greeting-curve">
           <span class="wave-emoji">👋</span>
           <svg viewBox="0 0 300 100">
@@ -853,7 +900,9 @@
         <div id="ai-chatbot-window">
           <div id="ai-chatbot-header">
             <h3><img src="${LOGO_URL}" alt="NWCMC Logo" class="ai-chatbot-header-logo" /> NWCMC Assistant</h3>
-            <button id="ai-chatbot-close" aria-label="Close">&times;</button>
+            <div id="ai-chatbot-header-actions">
+              <button id="ai-chatbot-close" aria-label="Close">&times;</button>
+            </div>
           </div>
           <div id="ai-chatbot-messages"></div>
           <div id="ai-chatbot-input-container">
@@ -872,6 +921,7 @@
       const closeBtn = document.getElementById("ai-chatbot-close")
       const input = document.getElementById("ai-chatbot-input")
       const sendBtn = document.getElementById("ai-chatbot-send")
+      const micBtn = document.getElementById("ai-chatbot-mic")
 
       button.addEventListener("click", () => this.toggleWidget())
       closeBtn.addEventListener("click", () => this.closeWidget())
@@ -887,6 +937,25 @@
         }
       })
       sendBtn.addEventListener("click", () => this.sendMessage())
+
+      // NEW: Mic click toggles listening; works independently as voice search
+      if (micBtn) {
+        micBtn.addEventListener("click", async () => {
+          if (!this.sttSupported) {
+            this.addMessageToHistory(
+              this.currentLanguage === "marathi"
+                ? "क्षमस्व, तुमच्या ब्राउझरमध्ये आवाज इनपुट समर्थित नाही."
+                : "Sorry, voice input is not supported in your browser.",
+            )
+            return
+          }
+          if (this.isListening) {
+            this.stopListening(true)
+          } else {
+            await this.startListening()
+          }
+        })
+      }
     },
 
     toggleWidget: function () {
@@ -984,6 +1053,8 @@
     updateInputState: function () {
       const input = document.getElementById("ai-chatbot-input")
       const sendBtn = document.getElementById("ai-chatbot-send")
+      const micBtn = document.getElementById("ai-chatbot-mic")
+
       if (this.currentLevel === "free_text") {
         input.disabled = false
         sendBtn.disabled = !input.value.trim()
@@ -991,6 +1062,19 @@
       } else {
         input.disabled = true
         sendBtn.disabled = true
+      }
+
+      // Mic should be available independently (enable if STT supported)
+      if (micBtn) {
+        if (this.sttSupported) {
+          micBtn.disabled = false
+          micBtn.style.opacity = "1"
+          micBtn.style.cursor = "pointer"
+        } else {
+          micBtn.disabled = true
+          micBtn.style.opacity = "0.5"
+          micBtn.style.cursor = "not-allowed"
+        }
       }
     },
 
@@ -1004,9 +1088,7 @@
       // Prominent logo
       this.addMessageToHistory(null, false, "welcome_logo")
       // Welcome + language buttons
-      this.addMessageToHistory(
-        "Welcome to NWCMC Assistant / NWCMC सहाय्यकात स्वागत — Choose Language / भाषा निवडा",
-      )
+      this.addMessageToHistory("Welcome to NWCMC Assistant / NWCMC सहाय्यकात स्वागत — Choose Language / भाषा निवडा")
       this.addButtonsToHistory([
         { label: "English", action: "language", value: "english" },
         { label: "Marathi", action: "language", value: "marathi" },
@@ -1083,7 +1165,6 @@
       const menuQuery = buttonElement.dataset.menuQuery
       const subQuery = buttonElement.dataset.subQuery
 
-      // Echo the user's selection
       if (!["back_to_top", "back_to_second"].includes(action)) {
         this.addMessageToHistory(label, true)
       }
@@ -1093,12 +1174,39 @@
         this.currentLevel = "top_category"
         const lang = this.MENU_STRUCTURE[this.currentLanguage]
         this.addMessageToHistory(lang.welcome)
+        if (this.recognition) this.recognition.lang = this.getCurrentLangCode()
+        if (this.ttsSupported) {
+          const wanted = this.getCurrentLangCode()
+          this.selectedVoice = this.pickVoiceFor(wanted, window.speechSynthesis.getVoices())
+        }
         this.showTopCategories()
         return
       }
 
       if (action === "top") {
-        this.currentTopCategory = top // rts | rti | payments | grievance
+        this.currentTopCategory = top
+
+        // NEW: Direct reply for RTI and Grievance
+        if (top === "rti" || top === "grievance" || top === "contact") {
+          const block = this.MENU_STRUCTURE[this.currentLanguage][top]
+          if (block?.directReply) {
+            this.addMessageToHistory(block.directReply)
+            this.offerNav()
+            this.currentLevel = "top_category"
+            this.updateInputState()
+            return
+          }
+        }
+
+        // Suggestion now has only two menus (no submenus) -> still show second level
+        if (top === "suggestion") {
+          this.currentLevel = "second_menu"
+          this.currentMenuContext = null
+          this.showSecondMenus()
+          return
+        }
+
+        // Default flow for RTS and Payments
         this.currentLevel = "second_menu"
         this.currentMenuContext = null
         this.showSecondMenus()
@@ -1106,38 +1214,49 @@
       }
 
       if (action === "menu") {
+        // NEW: If the chosen menu has no submenus, reply immediately
+        const lang = this.MENU_STRUCTURE[this.currentLanguage]
+        const topKey = this.currentTopCategory
+        const block = lang?.[topKey]
+        const menu = block?.menus?.find((m) => m.query === menuQuery)
+
+        if (menu && (!menu.submenus || menu.submenus.length === 0)) {
+          if (menu.reply) {
+            this.addMessageToHistory(menu.reply)
+          } else if (menu.replyKey) {
+            const sample = this.SAMPLE_RESPONSES[menu.replyKey] || "Information will appear here."
+            this.addMessageToHistory(sample)
+          } else {
+            this.addMessageToHistory("Information will appear here.")
+          }
+          this.offerNav()
+          this.updateInputState()
+          return
+        }
+
+        // Otherwise continue to submenus as before
         this.currentLevel = "submenu"
         this.showSubmenus(menuQuery)
         return
       }
 
       if (action === "submenu") {
-        // Build a query and respond.
         const topKey = this.currentTopCategory
         const langKey = this.currentLanguage
         const fullQuery = `${topKey.toUpperCase()} - ${menuQuery} - ${subQuery}`
 
-        // For RTI and Grievance we return sample data (no AI)
-        if (topKey === "rti" || topKey === "grievance") {
-          const sample = this.SAMPLE_RESPONSES[subQuery] || "Sample information will appear here."
-          this.addMessageToHistory(sample)
-          this.offerNav()
-          return
-        }
+        // Keep payments and other samples same
+        // if (topKey === "payments") {
+        //   const sample = this.SAMPLE_RESPONSES[subQuery] || "Payment information (sample) will appear here."
+        //   this.addMessageToHistory(sample)
+        //   this.offerNav()
+        //   return
+        // }
 
-        // For Key Payment Serving we can return sample payments info (as requested)
-        if (topKey === "payments") {
-          const sample = this.SAMPLE_RESPONSES[subQuery] || "Payment information (sample) will appear here."
-          this.addMessageToHistory(sample)
-          this.offerNav()
-          return
-        }
-
-        // For RTS (and others not sample-only), ask AI with a concise instruction
+        // Default: call backend AI (unchanged)
         this.currentLevel = "free_text"
         this.updateInputState()
 
-        // Show typing indicator
         const messagesContainer = document.getElementById("ai-chatbot-messages")
         const typingMessageDiv = document.createElement("div")
         typingMessageDiv.classList.add("ai-chatbot-message", "bot", "typing")
@@ -1151,17 +1270,14 @@
           const response = await fetch(this.config.apiUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              message: fullQuery,
-              language: langKey,
-            }),
+            body: JSON.stringify({ message: fullQuery, language: langKey }),
           })
           const data = await response.json()
           typingMessageDiv.remove()
           this.addMessageToHistory(
             data.response || (langKey === "marathi" ? "क्षमस्व, माहिती उपलब्ध नाही." : "Sorry, no information found."),
           )
-
+          if (data && data.response) this.speakText(data.response)
           this.offerNav()
         } catch (err) {
           console.error("Chat error:", err)
@@ -1171,7 +1287,6 @@
           )
           this.offerNav()
         } finally {
-          // After AI response, we remain in controlled nav (not free typing unless user chooses 'Other')
           this.currentLevel = "submenu"
           this.updateInputState()
         }
@@ -1198,14 +1313,6 @@
         this.currentLevel = "second_menu"
         this.currentMenuContext = null
         this.showSecondMenus()
-        return
-      }
-
-      if (action === "back_to_main") {
-        // Legacy safety
-        this.currentLevel = "top_category"
-        this.currentMenuContext = null
-        this.showTopCategories()
         return
       }
 
@@ -1263,6 +1370,10 @@
           data.response ||
             (this.currentLanguage === "marathi" ? "क्षमस्व, माहिती उपलब्ध नाही." : "Sorry, no information found."),
         )
+        // Speak the response (NEW)
+        if (data && data.response) {
+          this.speakText(data.response)
+        }
       } catch (error) {
         console.error("Chat error:", error)
         typingMessageDiv.remove()
@@ -1275,8 +1386,167 @@
         this.updateInputState()
       }
     },
+
+    // ===== Voice utilities (NEW) =====
+
+    // Current BCP-47 language for STT/TTS
+    getCurrentLangCode: function () {
+      if (this.currentLanguage === "marathi") return "mr-IN"
+      return "en-IN" // default English; change to 'en-US' if you prefer
+    },
+
+    // Initialize TTS and STT
+    initVoice: function () {
+      // TTS support
+      this.ttsSupported = typeof window !== "undefined" && "speechSynthesis" in window
+      if (this.ttsSupported) {
+        const loadVoices = () => {
+          const voices = window.speechSynthesis.getVoices()
+          this.selectedVoice = this.pickVoiceFor(this.getCurrentLangCode(), voices)
+        }
+        window.speechSynthesis.onvoiceschanged = () => loadVoices()
+        loadVoices()
+      }
+
+      // STT support
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+      if (SpeechRecognition) {
+        this.sttSupported = true
+        this.recognition = new SpeechRecognition()
+        this.recognition.continuous = false
+        this.recognition.interimResults = false
+        this.recognition.maxAlternatives = 1
+        this.recognition.lang = this.getCurrentLangCode()
+
+        this.recognition.onstart = () => {
+          this.isListening = true
+          const micBtn = document.getElementById("ai-chatbot-mic")
+          if (micBtn) micBtn.classList.add("listening")
+        }
+        this.recognition.onend = () => {
+          this.isListening = false
+          const micBtn = document.getElementById("ai-chatbot-mic")
+          if (micBtn) micBtn.classList.remove("listening")
+        }
+        this.recognition.onerror = (e) => {
+          console.error("STT error:", e)
+          this.isListening = false
+          const micBtn = document.getElementById("ai-chatbot-mic")
+          if (micBtn) micBtn.classList.remove("listening")
+          if (e.error !== "no-speech") {
+            this.addMessageToHistory(
+              this.currentLanguage === "marathi"
+                ? "आवाज कॅप्चर करण्यात समस्या आली."
+                : "There was a problem capturing your voice.",
+            )
+          }
+        }
+        this.recognition.onresult = (event) => {
+          try {
+            const transcript = (event.results?.[0]?.[0]?.transcript || "").trim()
+            if (transcript) {
+              // Show user's voice as text and query KB backend
+              this.addMessageToHistory(transcript, true)
+              this.sendMessage(transcript, true)
+            }
+          } catch (err) {
+            console.error("STT parse error:", err)
+          }
+        }
+      } else {
+        this.sttSupported = false
+        const micBtn = document.getElementById("ai-chatbot-mic")
+        if (micBtn) {
+          micBtn.disabled = true
+          micBtn.title = this.currentLanguage === "marathi" ? "आवाज इनपुट उपलब्ध नाही" : "Voice input not available"
+        }
+      }
+    },
+
+    // Choose a voice matching lang; fallback sensibly
+    pickVoiceFor: (lang, voices) => {
+      if (!voices || !voices.length) return null
+      const exact = voices.find((v) => v.lang?.toLowerCase() === lang.toLowerCase())
+      if (exact) return exact
+      const base = lang.split("-")[0].toLowerCase()
+      const sameBase = voices.find((v) => v.lang?.toLowerCase().startsWith(base))
+      if (sameBase) return sameBase
+      const google = voices.find((v) => v.name?.toLowerCase().includes("google"))
+      return google || voices[0]
+    },
+
+    // Start listening to user speech
+    startListening: async function () {
+      try {
+        if (!this.recognition) return
+        // Align recognition language
+        this.recognition.lang = this.getCurrentLangCode()
+
+        // Stop any speaking to avoid echo
+        if (this.ttsSupported && window.speechSynthesis.speaking) {
+          window.speechSynthesis.cancel()
+        }
+
+        this.recognition.start()
+      } catch (err) {
+        console.error("Failed to start STT:", err)
+        this.addMessageToHistory(
+          this.currentLanguage === "marathi" ? "मायक्रोफोन सुरू करता आला नाही." : "Could not start the microphone.",
+        )
+      }
+    },
+
+    // Stop listening
+    stopListening: function () {
+      try {
+        if (!this.recognition) return
+        this.recognition.stop()
+      } catch (err) {
+        console.error("Failed to stop STT:", err)
+      }
+    },
+
+    // Speak text response
+    speakText: function (text) {
+      if (!this.ttsSupported || !text) return
+      try {
+        // Optional: only speak when widget is open
+        if (!this.isOpen) return
+
+        window.speechSynthesis.cancel()
+
+        const utter = new SpeechSynthesisUtterance(text)
+        const voices = window.speechSynthesis.getVoices()
+        if (!this.selectedVoice) {
+          this.selectedVoice = this.pickVoiceFor(this.getCurrentLangCode(), voices)
+        }
+        utter.lang = this.selectedVoice?.lang || this.getCurrentLangCode()
+        if (this.selectedVoice) utter.voice = this.selectedVoice
+        utter.rate = 1.0
+        utter.pitch = 1.0
+        utter.volume = 1.0
+
+        this.speaking = true
+        utter.onend = () => (this.speaking = false)
+        utter.onerror = (e) => {
+          console.error("TTS error:", e)
+          this.speaking = false
+        }
+        window.speechSynthesis.speak(utter)
+      } catch (err) {
+        console.error("Failed to speak:", err)
+      }
+    },
   }
 
   // Expose globally
   window.AIChatbot = AIChatbot
 })()
+
+
+//commented from lne 857:- or near the cross button of chatbot closing
+{/* <button id="ai-chatbot-mic" aria-label="Voice input" title="Voice input">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 14a3 3 0 0 0 3-3V7a3 3 0 0 0-6 0v4a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zm-5 7a7 7 0 0 0 7-7h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 7 7zm-1 3h2v-2h-2v2z"/>
+                </svg>
+              </button> */}
