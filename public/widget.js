@@ -1277,7 +1277,7 @@ SAMPLE_RESPONSES  : {
           this.addMessageToHistory(
             data.response || (langKey === "marathi" ? "क्षमस्व, माहिती उपलब्ध नाही." : "Sorry, no information found."),
           )
-          if (data && data.response) this.speakText(data.response)
+          // if (data && data.response) this.speakText(data.response)
           this.offerNav()
         } catch (err) {
           console.error("Chat error:", err)
@@ -1371,9 +1371,9 @@ SAMPLE_RESPONSES  : {
             (this.currentLanguage === "marathi" ? "क्षमस्व, माहिती उपलब्ध नाही." : "Sorry, no information found."),
         )
         // Speak the response (NEW)
-        if (data && data.response) {
-          this.speakText(data.response)
-        }
+        // if (data && data.response) {
+        //   this.speakText(data.response)
+        // }
       } catch (error) {
         console.error("Chat error:", error)
         typingMessageDiv.remove()
@@ -1550,3 +1550,6 @@ SAMPLE_RESPONSES  : {
                   <path d="M12 14a3 3 0 0 0 3-3V7a3 3 0 0 0-6 0v4a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zm-5 7a7 7 0 0 0 7-7h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 7 7zm-1 3h2v-2h-2v2z"/>
                 </svg>
               </button> */}
+
+//1280 and 1374 for speaking the text which has now been commented i.e. wherever:-
+//  if (data && data.response)
