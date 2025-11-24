@@ -1114,6 +1114,18 @@ SAMPLE_RESPONSES  : {
       const lang = this.MENU_STRUCTURE[this.currentLanguage]
       const topKey = this.currentTopCategory
       const block = lang[topKey]
+
+      if (!block || !block.menus || block.menus.length === 0) {
+        // If category has no menus (like show_name, rti, grievance with direct replies),
+        // go back to top categories
+        this.currentLevel = "top_category"
+        this.currentMenuContext = null
+        this.currentTopCategory = null
+        this.showTopCategories()
+        return
+      }
+
+      
       this.addMessageToHistory(block.title)
       const buttons = block.menus.map((m) => ({
         label: m.label,
