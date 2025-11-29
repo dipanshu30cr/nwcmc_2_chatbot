@@ -873,6 +873,44 @@ SAMPLE_RESPONSES  : {
             font-weight: 606;
             height: 30px;
           }
+
+          .dot-flashing {
+            display: inline-block;
+            position: relative;
+            width: 12px;
+            height: 4px;
+          }
+
+          .dot-flashing::before,
+          .dot-flashing::after,
+          .dot-flashing div {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            width: 4px;
+            height: 4px;
+            background: #999;
+            border-radius: 50%;
+            animation: dotFlashing 1s infinite linear alternate;
+          }
+
+          .dot-flashing div {
+            left: 6px;
+            animation-delay: 0.2s;
+          }
+
+          .dot-flashing::after {
+            left: 12px;
+            animation-delay: 0.4s;
+          }
+
+          @keyframes dotFlashing {
+            0% { opacity: .2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: .2; transform: scale(1); }
+          }
+
           .ai-chatbot-button-option:hover { background: #d1d5db; border-color: #94a3b8; }
           @media (max-width: 480px) {
             #ai-chatbot-window { width: calc(100vw - 40px); height: calc(100vh - 100px); bottom: 80px; right: 20px; }
@@ -1272,9 +1310,14 @@ SAMPLE_RESPONSES  : {
         const messagesContainer = document.getElementById("ai-chatbot-messages")
         const typingMessageDiv = document.createElement("div")
         typingMessageDiv.classList.add("ai-chatbot-message", "bot", "typing")
-        typingMessageDiv.innerHTML = `<img src="${LOGO_URL}" alt="Typing" class="ai-chatbot-typing-logo" /> <span class="dot-flashing"></span> ${
-          langKey === "marathi" ? "माहिती आणत आहे..." : "Fetching information..."
-        }`
+        // typingMessageDiv.innerHTML = `<img src="${LOGO_URL}" alt="Typing" class="ai-chatbot-typing-logo" /> <span class="dot-flashing"></span> ${
+        //   langKey === "marathi" ? "माहिती आणत आहे..." : "Fetching information..."
+        // }`
+        typingMessageDiv.innerHTML = `
+          <img src="${LOGO_URL}" alt="Typing" class="ai-chatbot-typing-logo" />
+          <span class="dot-flashing"><div></div></span>
+        `
+
         messagesContainer.appendChild(typingMessageDiv)
         messagesContainer.scrollTop = messagesContainer.scrollHeight
 
@@ -1361,9 +1404,13 @@ SAMPLE_RESPONSES  : {
       const messagesContainer = document.getElementById("ai-chatbot-messages")
       const typingMessageDiv = document.createElement("div")
       typingMessageDiv.classList.add("ai-chatbot-message", "bot", "typing")
-      typingMessageDiv.innerHTML = `<img src="${LOGO_URL}" alt="Typing" class="ai-chatbot-typing-logo" /> <span class="dot-flashing"></span> ${
-        this.currentLanguage === "marathi" ? "माहिती आणत आहे..." : "Fetching information..."
-      }`
+      // typingMessageDiv.innerHTML = `<img src="${LOGO_URL}" alt="Typing" class="ai-chatbot-typing-logo" /> <span class="dot-flashing"></span> ${
+      //   this.currentLanguage === "marathi" ? "माहिती आणत आहे..." : "Fetching information..."
+      // }`
+      typingMessageDiv.innerHTML = `
+        <img src="${LOGO_URL}" alt="Typing" class="ai-chatbot-typing-logo" />
+        <span class="dot-flashing"><div></div></span>
+      `
       messagesContainer.appendChild(typingMessageDiv)
       messagesContainer.scrollTop = messagesContainer.scrollHeight
 
