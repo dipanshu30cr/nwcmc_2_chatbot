@@ -124,7 +124,7 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
       english: {
         welcome: "Hi, please choose a language to continue.\nनमस्कार, पुढे जाण्यासाठी कृपया भाषा निवडा.",
         topCategories: [
-          { label: "RTS", key: "rts" },
+          { label: "Citizen Services(RTS)", key: "rts" },
           { label: "RTI", key: "rti" },
           { label: "Key Payment Serving", key: "payments" },
           { label: "Grievance", key: "grievance" },
@@ -351,7 +351,7 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
       marathi: {
         welcome: "नमस्कार, पुढे जाण्यासाठी कृपया भाषा निवडा.\nHi, please choose a language to continue.",
         topCategories: [
-          { label: "RTS (हक्क सेवा)", key: "rts" },
+          { label: "RTS (नागरिक/हक्क सेवा)", key: "rts" },
           { label: "RTI (माहितीचा अधिकार)", key: "rti" },
 
           { label: "महत्वाची देय सेवा", key: "payments" },
