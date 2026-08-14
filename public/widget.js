@@ -96,7 +96,29 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
 माहितीचा अधिकार अधिनियम, 2005 कलम 4(1)(ख) नुसार स्वयंप्रेरणेने जाहीर करावयाची माहिती (भांडार विभाग)
 माहितीचा अधिकार अधिनियम, 2005 कलम 4(1)(ख) नुसार स्वयंप्रेरणेने जाहीर करावयाची माहिती (संगणक विभाग 2024–25)`
 
+const ELECTION_MARATHI=`
+**स्थानिक स्वराज्य संस्था मतदार यादी :-**
+या लिंकवर जा :-
+[https://mahasecvoterlist.in/ObjectionOnClick/SearchName](https://mahasecvoterlist.in/ObjectionOnClick/SearchName)
+आपल्या नावाने किंवा EPIC क्रमांकाने शोधा
 
+
+**उमेदवारांची यादी व इतर माहिती :-**
+[https://nwcmc.gov.in/web/pdfview.php#gsc.tab=0](https://nwcmc.gov.in/web/pdfview.php#gsc.tab=0)
+
+वरील लिंकवर मेनूमधून **“उमेदवारांनी सादर केलेले शपथपत्र”** हा पर्याय निवडून विभाग-प्रभाग-गटनिहाय उमेदवारांची यादी व शपथपत्रे पाहू शकता.`
+
+const ELECTION_ENGLISH=`
+**Local Self Government Voterlist:-**
+Go to this link:-
+https://mahasecvoterlist.in/ObjectionOnClick/SearchName
+search by your name or EPIC Number Wise
+
+
+**Candidate List and other Information:-**
+https://nwcmc.gov.in/web/pdfview.php#gsc.tab=0
+
+you can view the candidate list and affidavits zone-, ward-, and group-wise by selecting “उमेदवारांनी सादर केलेले शपथपत्र” from the menu on the above link.`
 
 
   const AIChatbot = {
@@ -122,12 +144,13 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
     // Menu structures
     MENU_STRUCTURE: {
       english: {
-        welcome: "Hi, please choose a language to continue.\nनमस्कार, पुढे जाण्यासाठी कृपया भाषा निवडा.",
+        welcome: "Hi, please choose a category to continue.",
         topCategories: [
-          { label: "RTS", key: "rts" },
-          { label: "RTI", key: "rti" },
-          { label: "Key Payment Serving", key: "payments" },
-          { label: "Grievance", key: "grievance" },
+          { label: "Citizen Services(RTS)", key: "rts" },
+          { label: "Municipal Election 2025", key: "election" },
+          { label: "Right To Information(RTI)", key: "rti" },
+          { label: "View Due and Payment", key: "payments" },
+          { label: "Grievance/Complaint", key: "grievance" },
           { label: "Emergency Contact", key: "contact" },
           // { label: "Emergency Contact", key: "suggestion" },
         ],
@@ -279,14 +302,14 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
         },
         // Payment Serving only Water, Property, Trade with two submenus
         payments: {
-          title: "Key Payment Serving",
+          title: "View Due and Payment",
           menus: [
             {
               label: "Water",
               query: "Payment - Water",
               submenus: [
                 { label: "Payment Steps", query: "Payment Steps for Water" },
-                { label: "Offline Payment", query: "Offline Payment for Water" },
+                { label: "View Due Details", query: "View Due Details for Water" },
               ],
             },
             {
@@ -294,7 +317,7 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
               query: "Payment - Property",
               submenus: [
                 { label: "Payment Steps", query: "Payment Steps for Property" },
-                { label: "Offline Payment", query: "Offline Payment for Property" },
+                { label: "View Due Details", query: "View Due Details for Property" },
               ],
             },
           ],
@@ -306,32 +329,18 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
           directReply: DIRECT_RTI_REPLY,
           menus: [],
         },
+        election: {
+          title: "Municipal Election 2025",
+          // No menus/submenus; show a direct reply
+          directReply: ELECTION_ENGLISH,
+          menus: [],
+        },
         grievance: {
-          title: "Grievance",
+          title: "Grievance/Complaint",
           // No menus/submenus; show a direct reply
           directReply: DIRECT_GRIEVANCE_REPLY,
           menus: [],
         },
-
-        // suggestion: {
-        //   title: "Suggestion",
-        //   // Exactly 2 menus, no submenus; each menu directly replies
-        //   menus: [
-        //     {
-        //       label: "Online Form",
-        //       query: "suggestion_online",
-        //       submenus: [],
-        //       replyKey: "Suggestion Online Form", // uses SAMPLE_RESPONSES
-        //     },
-        //     {
-        //       label: "Offline",
-        //       query: "suggestion_offline",
-        //       submenus: [],
-        //       reply:
-        //         "Submit your suggestion offline at the ward office counter and collect an acknowledgement (sample).",
-        //     },
-        //   ],
-        // },
 
         contact: {
           title: "Emergency Contact",
@@ -349,13 +358,14 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
 
       // Marathi localization
       marathi: {
-        welcome: "नमस्कार, पुढे जाण्यासाठी कृपया भाषा निवडा.\nHi, please choose a language to continue.",
+        welcome: "नमस्कार, पुढे जाण्यासाठी कृपया श्रेणी निवडा.",
         topCategories: [
-          { label: "RTS (हक्क सेवा)", key: "rts" },
+          { label: "RTS (नागरिक/हक्क सेवा)", key: "rts" },
+          { label: "महानगरपालिका निवडणुक 2025", key: "election" },
           { label: "RTI (माहितीचा अधिकार)", key: "rti" },
 
           { label: "महत्वाची देय सेवा", key: "payments" },
-          { label: "तक्रार", key: "grievance" },
+          { label: "तक्रार / गाऱ्हाणे", key: "grievance" },
           { label: "📞 आपत्कालीन कॉल क्रमांक", key: "contact" },
           // { label: "सूचना", key: "suggestion" },
         ],
@@ -504,14 +514,14 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
           ],
         },
         payments: {
-          title: "महत्वाची देय सेवा",
+          title: "देय आणि पेमेंट पहा",
           menus: [
             {
               label: "पाणी",
               query: "Payment - Water",
               submenus: [
                 { label: "पेमेंट टप्पे पाणी", query: "Payment Steps for Water" },
-                { label: "ऑफलाइन पेमेंट", query: "Offline Payment for Water" },
+                { label: "देय तपशील पहा", query: "View Due Details for Water" },
               ],
             },
             {
@@ -519,7 +529,7 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
               query: "Payment - Property",
               submenus: [
                 { label: "पेमेंट टप्पे मालमत्ता", query: "Payment Steps for Property" },
-                { label: "ऑफलाइन पेमेंट", query: "Offline Payment for Property" },
+                { label: "देय तपशील पहा", query: "View Due Details for Property" },
               ],
             },
           ],
@@ -530,8 +540,13 @@ const DIRECT_RTI_REPLY_MARATHI = `या लिंकवर जा – https://n
           directReply: DIRECT_RTI_REPLY_MARATHI,
           menus: [],
         },
+        election: {
+          title: "महानगरपालिका निवडणुक 2025",
+          directReply: ELECTION_MARATHI,
+          menus: [],
+        },
         grievance: {
-          title: "तक्रार",
+          title: "तक्रार / गाऱ्हाणे",
           directReply: DIRECT_GRIEVANCE_REPLY_MARATHI,
           menus: [],
         },
@@ -1137,7 +1152,7 @@ SAMPLE_RESPONSES  : {
     // Navigation helpers
     showTopCategories: function () {
       const lang = this.MENU_STRUCTURE[this.currentLanguage]
-      this.addMessageToHistory(this.currentLanguage === "marathi" ? "कृपया श्रेणी निवडा:" : "Please choose a category:")
+      this.addMessageToHistory(this.currentLanguage === "marathi" ? "" : "")
       const buttons = lang.topCategories.map((c) => ({
         label: c.label,
         action: "top",
@@ -1237,7 +1252,7 @@ SAMPLE_RESPONSES  : {
         this.currentTopCategory = top
 
         // NEW: Direct reply for RTI and Grievance
-        if (top === "rti" || top === "grievance" || top === "contact") {
+        if (top === "rti" || top === "grievance" || top === "contact" || top === "election") {
           const block = this.MENU_STRUCTURE[this.currentLanguage][top]
           if (block?.directReply) {
             this.addMessageToHistory(block.directReply)
