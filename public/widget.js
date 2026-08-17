@@ -142,22 +142,23 @@ you can view the candidate list and affidavits zone-, ward-, and group-wise by s
     selectedVoice: null,
 
     // Menu structures
-    MENU_STRUCTURE: {
-      english: {
-        welcome: "Hi, please choose a category to continue.",
-        topCategories: [
-          { label: "Citizen Services(RTS)", key: "rts" },
-          { label: "Municipal Election 2025", key: "election" },
-          { label: "Right To Information(RTI)", key: "rti" },
-          { label: "View Due and Payment", key: "payments" },
-          { label: "Grievance/Complaint", key: "grievance" },
-          { label: "Emergency Contact", key: "contact" },
-          // { label: "Emergency Contact", key: "suggestion" },
-        ],
-        // RTS full menus with submenus
-        rts: {
-          title: "Right to Services (RTS)",
-          menus: [
+ MENU_STRUCTURE: {
+  english: {
+    welcome: "Hi, please choose a category to continue.",
+    topCategories: [
+      { label: "Citizen Services(RTS)", key: "rts" },
+      { label: "Municipal Election 2025", key: "election" },
+      { label: "Right To Information(RTI)", key: "rti" },
+      { label: "View Due and Payment", key: "payments" },
+      { label: "Grievance/Complaint", key: "grievance" },
+      { label: "Emergency Contact", key: "contact" },
+      // { label: "Emergency Contact", key: "suggestion" },
+    ],
+
+    // RTS full menus with submenus
+    rts: {
+      title: "Right to Services (RTS)",
+      menus: [
             {
               label: "Applied List",
               query: "Applied List",
