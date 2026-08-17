@@ -336,7 +336,7 @@ async function generateSynonyms(query: string): Promise<string[]> {
       },
       body: JSON.stringify({
         //model: "llama3-8b-8192",
-        model: "llama-3.1-8b-instant",
+        model: "openai/gpt-oss-20b",
         messages: [
           {
             role: "system",
@@ -510,7 +510,7 @@ Remember: If you find relevant information in the context above, answer the ques
       },
       body: JSON.stringify({
         //model: "llama3-8b-8192",
-        model: "llama-3.1-8b-instant",
+        model: "openai/gpt-oss-20b",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: query },
